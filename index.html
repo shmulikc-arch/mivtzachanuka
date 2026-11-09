@@ -1,0 +1,728 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="הרשמה למבצעי חנוכה עם אבא בבתי הרפואה – פנסאים ולב חב"ד">
+<meta property="og:title" content="מבצע חנוכה עם אבא!">
+<meta property="og:description" content="הרשמה למבצעי חנוכה עם אבא בבתי הרפואה – פנסאים ולב חב"ד">
+<meta property="og:image" content="https://shmulikc-arch.github.io/mivtzachanuka/ad.jpg">
+<meta name="theme-color" content="#3A2716">
+<style>[hidden]{display:none!important}body{margin:0}img{max-width:100%}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}</style>
+</head>
+<body>
+<title>מבצעי חנוכה עם אבא</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rubik:wght@700;800;900&family=Assistant:wght@400;600;700;800&display=swap">
+<style>
+/* Layout: ad poster as hero → campaign text → how it works → three-step wizard. Palette taken from the ad: deep warm brown, gold title, coral band. */
+:root{
+  --bg:#3A2716; --surface:rgba(74,50,30,.78); --raise:rgba(255,214,150,.09); --ink:#FFF7EA; --muted:#EBD9BC; --line:rgba(255,200,110,.24);
+  --primary:#FFC21A; --on-primary:#2A1806; --flame:#FFB000; --flame-soft:#6A4E26;
+  --gold-a:#FFE24A; --gold-b:#F59E0B; --gold-t1:#FFE24A; --gold-t2:#F59E0B; --coral-a:#F16C4D; --coral-b:#D4393D;
+  --ok:#7DD3A0; --ok-soft:#2F4A35; --err:#FF8E7E; --err-soft:#5E2E25; --warn:#FFC21A; --warn-soft:#6A4E26;
+  --display:"Rubik", "Assistant", "Arial Hebrew", Arial, sans-serif;
+  --body:"Assistant", "Arial Hebrew", Arial, sans-serif;
+  --r:14px; color-scheme:dark;
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:
+    radial-gradient(900px 520px at 50% -4%, rgba(255,176,60,.42), transparent 70%),
+    radial-gradient(620px 520px at 105% 38%, rgba(214,72,52,.22), transparent 70%),
+    radial-gradient(640px 560px at -6% 72%, rgba(255,190,70,.16), transparent 70%),
+    linear-gradient(180deg,#5B3B20 0%,#45301C 40%,#352414 100%);
+  background-attachment:fixed;background-color:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.6;direction:rtl;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:880px;margin:0 auto}
+h1,h2,h3{font-family:var(--display);font-weight:800;line-height:1.2;text-wrap:balance;margin:0}
+p{margin:0}
+button{font:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--flame);outline-offset:2px}
+
+.demo-bar{background:var(--flame-soft);color:var(--ink);font-size:14px;text-align:center;padding:8px 12px;border-radius:0 0 10px 10px;max-width:880px;margin:0 auto}
+
+/* hero poster */
+.poster{padding-block:24px 8px;display:flex;flex-direction:column;align-items:center;gap:20px}
+.poster img{display:block;width:100%;max-width:560px;height:auto;border-radius:18px;box-shadow:0 30px 60px -28px rgba(0,0,0,.55)}
+.cta{display:inline-flex;align-items:center;gap:10px;background:linear-gradient(180deg,var(--gold-a),var(--gold-b));color:var(--on-primary);border:0;border-radius:999px;padding:14px 34px;font-weight:800;font-size:19px;text-decoration:none;box-shadow:0 10px 24px -10px rgba(220,130,0,.55)}
+.cta:hover{filter:brightness(1.06)}
+.gold{background:linear-gradient(180deg,var(--gold-t1),var(--gold-t2));-webkit-background-clip:text;background-clip:text;color:transparent}
+
+/* campaign text */
+.ad{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:36px clamp(20px,5vw,56px) 0;text-align:center;display:flex;flex-direction:column;align-items:center;gap:16px;overflow:hidden}
+.ad-kicker{font-weight:800;font-size:15px;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:4px 16px}
+.ad-title{font-size:clamp(38px,8vw,64px);line-height:1.05;font-weight:900}
+.ad-title span{display:block;font-size:.48em;color:var(--ink);margin-bottom:6px}
+.ad-title .gold{font-size:1em;margin:0;color:transparent}
+.ad p{max-width:54ch;font-size:18px}
+.ad .lead-strong{font-weight:700;font-size:19px}
+.ad-bonus{max-width:58ch;font-size:17px;color:var(--gold-a);background:var(--flame-soft);border-radius:14px;padding:12px 18px}
+.ad-bonus strong{font-weight:800}
+.ad .fine{color:var(--muted);font-size:16px;border-block:1px solid var(--line);padding-block:10px}
+.ad .ad-tag{max-width:none}
+.ad-tag{align-self:stretch;margin:8px calc(-1 * clamp(20px,5vw,56px)) 0;background:linear-gradient(90deg,var(--coral-a),var(--coral-b));color:#FFF;font-family:var(--display);font-weight:800;font-size:clamp(22px,4.5vw,32px);padding:16px 12px}
+.ad-tag em{font-style:normal;color:var(--gold-a)}
+
+section{padding-block:40px}
+.sec-title{font-size:clamp(26px,4vw,34px);margin-bottom:8px}
+.sec-sub{color:var(--muted);margin-bottom:24px}
+
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;list-style:none;padding:0;margin:0;counter-reset:s}
+.steps li{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:20px;counter-increment:s;display:flex;flex-direction:column;gap:6px}
+.steps li::before{content:counter(s);font-family:var(--display);font-weight:900;font-size:30px;color:var(--flame);line-height:1}
+.steps h3{font-size:20px}
+.steps p{color:var(--muted);font-size:16px}
+
+/* wizard */
+.wizard{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:28px;box-shadow:0 20px 50px -30px rgba(0,0,0,.45)}
+.progress{display:flex;gap:8px;margin-bottom:24px;list-style:none;padding:0;flex-wrap:wrap}
+.progress li{flex:1;min-width:90px;font-size:14px;font-weight:700;color:var(--muted);border-top:4px solid var(--line);padding-top:8px}
+.progress li.on{color:var(--ink);border-color:var(--flame)}
+.progress li.done{border-color:var(--primary)}
+.pane-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px;flex-wrap:wrap}
+.pane-head h3{font-size:24px}
+.back{background:none;border:1px solid var(--line);color:var(--ink);border-radius:999px;padding:6px 16px;font-weight:600}
+.back:hover{border-color:var(--ink)}
+.picked{color:var(--muted);font-size:15px;margin-top:2px}
+
+.hosp-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+.hosp{display:flex;flex-direction:column;align-items:flex-start;gap:4px;text-align:right;background:var(--raise);border:2px solid transparent;border-radius:var(--r);padding:20px;color:var(--ink);transition:border-color .15s, transform .15s}
+.hosp:hover{border-color:var(--primary);transform:translateY(-2px)}
+.hosp .name{font-family:var(--display);font-size:22px}
+.hosp .meta{color:var(--muted);font-size:15px}
+.hosp .go{margin-top:10px;font-weight:800;color:var(--primary)}
+
+.days{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.day{display:flex;flex-direction:column;align-items:center;gap:4px;background:var(--raise);border:2px solid transparent;border-radius:var(--r);padding:16px 8px;color:var(--ink);position:relative;transition:border-color .15s}
+.day:hover:not(:disabled){border-color:var(--primary)}
+.day.sel{border-color:var(--primary);background:var(--flame-soft)}
+.day .wd{font-weight:700;font-size:15px}
+.day .hd{font-family:var(--display);font-weight:800;font-size:22px;line-height:1.1}
+.day .gd{color:var(--muted);font-size:14px;font-variant-numeric:tabular-nums}
+.candles{display:flex;gap:3px;margin-top:6px;direction:ltr}
+.candles i{width:5px;height:14px;border-radius:2px;background:var(--line)}
+.candles i.lit{background:var(--flame)}
+.day .nr{font-size:13px;color:var(--muted)}
+.day:disabled{opacity:.45;cursor:not-allowed}
+.day .full{position:absolute;top:8px;inset-inline-end:8px;background:var(--coral-b);color:#FFF;font-size:12px;font-weight:800;padding:1px 8px;border-radius:999px}
+
+.shift-pop{margin-top:14px;background:var(--raise);border-radius:var(--r);padding:16px 18px;display:flex;flex-direction:column;gap:10px;animation:pop .2s ease-out}
+@keyframes pop{from{opacity:0;transform:translateY(-6px)}}
+.shift-row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.shift-row .t{font-weight:800;font-size:20px;font-variant-numeric:tabular-nums}
+.ltr{direction:ltr;unicode-bidi:isolate;display:inline-block}
+.shift-row .t small{display:block;font-weight:600;font-size:14px;color:var(--muted)}
+.btn{background:linear-gradient(180deg,var(--gold-a),var(--gold-b));color:var(--on-primary);border:0;border-radius:999px;padding:10px 26px;font-weight:800}
+.btn:hover{filter:brightness(1.08)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn.ghost{background:none;color:var(--primary);border:2px solid var(--primary)}
+
+/* form */
+fieldset{border:0;padding:0;margin:0 0 22px}
+legend{font-family:var(--display);font-size:20px;margin-bottom:12px;padding:0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px 14px}
+.f{display:flex;flex-direction:column;gap:4px;min-width:0}
+.f label{font-weight:700;font-size:15px}
+.f input,.f select{font:inherit;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;width:100%}
+.f input:focus,.f select:focus{border-color:var(--primary);outline:none}
+.f.bad input,.f.bad select{border-color:var(--err)}
+.f .e{color:var(--err);font-size:13px;min-height:0}
+.child{background:var(--raise);border-radius:var(--r);padding:16px;margin-bottom:12px}
+.child .f input,.child .f select{background:var(--surface)}
+.child-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.child-head h4{margin:0;font-size:17px}
+.rm{background:none;border:0;color:var(--err);font-weight:700;font-size:14px}
+.add-child{width:100%;border:2px dashed var(--line);background:none;border-radius:var(--r);padding:12px;font-weight:800;color:var(--primary)}
+.add-child:hover{border-color:var(--primary)}
+.form-foot{display:flex;justify-content:flex-start;align-items:center;gap:14px;margin-top:8px;flex-wrap:wrap}
+.alert{border-radius:12px;padding:12px 16px;margin-bottom:16px;font-weight:600}
+.alert.err{background:var(--err-soft);color:var(--err)}
+
+/* confirmation */
+.done{text-align:center;padding-block:12px}
+.done .check{width:72px;height:72px;border-radius:50%;background:var(--ok-soft);color:var(--ok);display:grid;place-items:center;margin:0 auto 16px}
+.done h3{font-size:28px;margin-bottom:8px}
+.summary{display:grid;grid-template-columns:auto 1fr;gap:6px 18px;text-align:right;background:var(--raise);border-radius:var(--r);padding:18px 22px;max-width:460px;margin:20px auto}
+.summary dt{color:var(--muted);font-weight:600}
+.summary dd{margin:0;font-weight:700}
+.ref{font-variant-numeric:tabular-nums;letter-spacing:.08em}
+
+.loading{color:var(--muted);padding:24px 0;text-align:center}
+footer{color:var(--muted);font-size:14px;text-align:center;padding-block:32px 40px}
+
+/* scroll reveal: visible by default, JS hides only what's below the fold */
+.rv.pre{opacity:0;transform:translateY(24px)}
+.rv{transition:opacity .7s ease, transform .7s ease}
+@media (prefers-reduced-motion: reduce){.rv,.rv.pre{opacity:1;transform:none;transition:none}html{scroll-behavior:auto}}
+
+@media (max-width:720px){
+  .steps{grid-template-columns:1fr}
+  .days{grid-template-columns:repeat(2,1fr)}
+  .wizard{padding:20px 16px}
+}
+
+/* royal glow + gold sparkles */
+#sparkle{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:0}
+.wrap,.demo-bar{position:relative;z-index:1}
+.wizard,.steps li,.ad{backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-color:var(--line)}
+.wizard,.ad{box-shadow:0 0 0 1px rgba(255,210,120,.12) inset,0 24px 60px -30px rgba(0,0,0,.6)}
+.f input,.f select{background:rgba(30,18,8,.45)}
+.f select option{background:#3A2716;color:#FFF7EA}
+.sec-title{background:linear-gradient(180deg,#FFE9A8,#F5B330);-webkit-background-clip:text;background-clip:text;color:transparent}
+
+/* circles: steps + hospitals */
+.steps{grid-template-columns:repeat(3,1fr);gap:clamp(10px,3vw,28px);position:relative}
+.steps::before{content:"";position:absolute;top:calc(min(26vw,180px) / 2);inset-inline:16%;border-top:2px dashed var(--line);z-index:0}
+.steps li{background:none!important;border:0!important;padding:0;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;align-items:center;text-align:center;gap:10px;position:relative;z-index:1}
+.steps li::before{content:none}
+.circ{width:min(26vw,180px);aspect-ratio:1;max-width:100%;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:10%;
+  background:radial-gradient(circle at 50% 30%,var(--raise),var(--surface)),var(--bg);border:2px solid var(--flame);box-shadow:0 0 0 6px var(--flame-soft),0 14px 30px -16px rgba(0,0,0,.5)}
+.circ b{font-family:var(--display);font-weight:900;font-size:clamp(26px,6vw,40px);line-height:1;color:var(--flame)}
+.circ h3{font-size:clamp(13px,3.4vw,19px);line-height:1.2}
+.steps p{font-size:clamp(13px,3.4vw,16px);max-width:22ch}
+/* steps: one under the other at every width */
+@media all{
+  .steps{grid-template-columns:1fr;gap:0;justify-items:center}
+  .steps::before{content:none}
+  .steps li{gap:12px}
+  .steps li:not(:last-child)::after{content:"";display:block;width:0;height:44px;border-inline-start:2px dashed var(--flame);opacity:.55;margin-block:6px}
+  .circ{width:min(66vw,260px);gap:8px}
+  .circ b{font-size:56px}
+  .circ h3{font-size:24px}
+  .steps p{font-size:17px;max-width:28ch}
+}
+/* circle pops in as it scrolls into view */
+.steps li .circ{transition:transform .8s cubic-bezier(.2,.8,.2,1), box-shadow .8s ease}
+.steps li.rv.pre .circ{transform:scale(.6) rotate(-8deg);box-shadow:0 0 0 0 var(--flame-soft)}
+@media (prefers-reduced-motion: reduce){.steps li .circ,.steps li.rv.pre .circ{transform:none;transition:none}}
+.circ{padding:14%}
+.circ h3{color:var(--flame)}
+.circ p{color:var(--ink);font-size:clamp(15px,4vw,17px);line-height:1.4;max-width:none}
+.hosp .pre-name{font-size:13px;font-weight:700;color:var(--muted)}
+.hosp .name{font-weight:900}
+.hosp .hrs{margin-top:6px;font-size:14px;font-weight:800;color:var(--flame);direction:ltr;unicode-bidi:isolate}
+</style>
+
+<div class="demo-bar" id="demoBar" hidden>מצב הדגמה: ההרשמות נשמרות רק בדפדפן הזה. יום כ"ח כסלו במאיר מלא לדוגמה.</div>
+
+<canvas id="sparkle" aria-hidden="true"></canvas>
+<script>
+(() => {
+  const c = document.getElementById('sparkle'), x = c.getContext('2d');
+  const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let W, H, dpr, P = [];
+  function size() {
+    dpr = Math.min(2, devicePixelRatio || 1); W = innerWidth; H = innerHeight;
+    c.width = W * dpr; c.height = H * dpr; x.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const n = Math.round(Math.min(110, W * H / 9000));
+    P = Array.from({ length: n }, () => ({
+      x: Math.random() * W, y: Math.random() * H, r: Math.random() * 1.6 + .4,
+      s: Math.random() * .25 + .05, t: Math.random() * 6.28, v: Math.random() * .03 + .01,
+      big: Math.random() < .12
+    }));
+  }
+  function draw() {
+    x.clearRect(0, 0, W, H);
+    for (const p of P) {
+      const a = .35 + .65 * Math.abs(Math.sin(p.t));
+      const r = p.big ? p.r * 2.2 : p.r;
+      const g = x.createRadialGradient(p.x, p.y, 0, p.x, p.y, r * 4);
+      g.addColorStop(0, `rgba(255,232,150,${a})`); g.addColorStop(.35, `rgba(255,190,70,${a * .45})`); g.addColorStop(1, 'rgba(255,170,40,0)');
+      x.fillStyle = g; x.beginPath(); x.arc(p.x, p.y, r * 4, 0, 6.283); x.fill();
+      if (p.big && a > .8) { x.strokeStyle = `rgba(255,240,190,${(a - .8) * 3})`; x.lineWidth = .7;
+        x.beginPath(); x.moveTo(p.x - r * 5, p.y); x.lineTo(p.x + r * 5, p.y); x.moveTo(p.x, p.y - r * 5); x.lineTo(p.x, p.y + r * 5); x.stroke(); }
+      if (!still) { p.t += p.v; p.y -= p.s; if (p.y < -10) { p.y = H + 10; p.x = Math.random() * W; } }
+    }
+    if (!still && document.visibilityState === 'visible') requestAnimationFrame(draw);
+  }
+  addEventListener('resize', () => { size(); if (still) draw(); });
+  document.addEventListener('visibilitychange', () => { if (!still && document.visibilityState === 'visible') requestAnimationFrame(draw); });
+  size(); draw();
+})();
+</script>
+<div class="wrap">
+  <header class="poster">
+    <img src="ad.jpg" width="1131" height="1599" alt="השנה עושים מבצע חנוכה עם אבא! פרויקט מיוחד של הפנסאים ולב חב&quot;ד">
+    <a class="cta" href="#register">להרשמה למבצע</a>
+  </header>
+
+  <div class="ad rv">
+    <p class="ad-kicker">פרויקט מיוחד של הפנסאים ולב חב"ד</p>
+    <h2 class="ad-title"><span>השנה עושים</span><span class="gold" style="display:block;font-size:1em;margin:0">מבצע חנוכה<br>עם אבא!</span></h2>
+    <p class="lead-strong">באחד הערבים בחנוכה, אתם יכולים לצאת ל"מבצעים" יחד עם אבא, ולהביא את האור ואת השמחה גם למאושפזים בבתי הרפואה ולבני משפחותיהם.</p>
+    <div class="ad-bonus"><strong>ויש גם בונוסים!</strong> מי שישתתף ב"מבצע חנוכה" של הפנסאים והאבות יצבור כוכבים למבצע השנתי הגדול וגם ייכנס להגרלות על פרסים שווים.</div>
+    <p class="fine">מספר המקומות מוגבל, אז מהרו להזמין אבא ל"מבצע חנוכה" ביחד ולהירשם באתר המבצע.</p>
+    <a class="cta" href="#register">להרשמה</a>
+    <p class="ad-tag">אבות ופנסאים <em>יוצאים ומאירים</em></p>
+  </div>
+
+  <section class="rv">
+    <h2 class="sec-title">איך נרשמים</h2>
+    <p class="sec-sub">שלוש דקות, ואתם בפנים.</p>
+    <ol class="steps">
+      <li class="rv"><span class="circ"><h3>בוחרים בית רפואה</h3><p>לכל בית רפואה ימים ושעות משלו.</p></span></li>
+      <li class="rv"><span class="circ"><h3>בוחרים יום ושעה</h3><p>כ"ו עד ל' כסלו. יום מלא מסומן כתפוס.</p></span></li>
+      <li class="rv"><span class="circ"><h3>ממלאים פרטים</h3><p>פרטי האבא וכל הילדים שיוצאים איתו.</p></span></li>
+    </ol>
+  </section>
+
+  <section id="register" class="rv">
+    <h2 class="sec-title" style="margin-bottom:20px">הרשמה למבצעים</h2>
+    <div class="wizard">
+      <ol class="progress" id="progress">
+        <li data-s="1">בית רפואה</li><li data-s="2">יום ושעה</li><li data-s="3">פרטים</li>
+      </ol>
+      <div id="pane"><p class="loading">טוען…</p></div>
+    </div>
+  </section>
+
+  <footer style="border-top:1px solid var(--line)">ארגון הפנסאים · לב חב"ד – חסד ומרפא · <a href="admin.html" style="color:inherit">כניסת מנהלים</a></footer>
+</div>
+
+<script>
+/* ============================================================
+   שכבת נתונים משותפת לדף ההרשמה ולדשבורד
+   אם SUPABASE_URL ריק → מצב הדגמה (נשמר בדפדפן בלבד)
+   ============================================================ */
+const CONFIG = {
+  SUPABASE_URL: '',        // https://xxxx.supabase.co
+  SUPABASE_ANON_KEY: '',   // anon public key
+};
+
+const Data = (() => {
+  const DEMO = !CONFIG.SUPABASE_URL || !CONFIG.SUPABASE_ANON_KEY;
+  let sb = null;
+
+  async function client() {
+    if (sb) return sb;
+    if (!window.supabase) {
+      await new Promise((ok, fail) => {
+        const s = document.createElement('script');
+        s.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js';
+        s.onload = ok; s.onerror = () => fail(new Error('NETWORK'));
+        document.head.appendChild(s);
+      });
+    }
+    sb = window.supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY);
+    return sb;
+  }
+
+  /* ---------------- מצב הדגמה ---------------- */
+  const KEY = 'pansaim_demo_v2';
+  const uid = () => 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+    const r = Math.random() * 16 | 0; return (c === 'x' ? r : (r & 3 | 8)).toString(16);
+  });
+  const DAYS = [
+    ['2026-12-06', 'כ"ו כסלו'], ['2026-12-07', 'כ"ז כסלו'], ['2026-12-08', 'כ"ח כסלו'],
+    ['2026-12-09', 'כ"ט כסלו'], ['2026-12-10', "ל' כסלו"],
+  ];
+  const OPTIONS = {
+    city: ['בני ברק', 'ירושלים', 'כפר חב"ד', 'פתח תקווה', 'כפר סבא', 'חולון', 'רחובות', 'לוד', 'ראשון לציון', 'בת ים'],
+    grade: ['גן', "א'", "ב'", "ג'", "ד'", "ה'", "ו'", "ז'", "ח'"],
+    branch: ['סניף בני ברק', 'סניף ירושלים', 'סניף כפר חב"ד', 'סניף פתח תקווה', 'סניף כפר סבא',
+             'סניף חולון', 'סניף רחובות', 'סניף לוד', 'סניף ראשון לציון', 'סניף בת ים'],
+  };
+
+  function seed() {
+    const hospitals = [
+      { id: 'h-meir', name: 'בית החולים מאיר', city: 'כפר סבא', sort: 1 },
+      { id: 'h-wolfson', name: 'בית החולים וולפסון', city: 'חולון', sort: 2 },
+      { id: 'h-soroka', name: 'בית החולים סורוקה', city: 'באר שבע', sort: 3 },
+      { id: 'h-kaplan', name: 'בית החולים קפלן', city: 'רחובות', sort: 4 },
+    ];
+    const shifts = [];
+    hospitals.forEach(h => DAYS.forEach(([date, heb], i) => shifts.push({
+      id: `${h.id}-${i}`, hospital_id: h.id, date, heb_date: heb,
+      start_time: '16:30', end_time: '18:30', capacity: 10, active: true,
+    })));
+    // נרשמים לדוגמה: יום אחד מלא כדי לראות "תפוס"
+    const first = ['מנחם', 'יוסף', 'שניאור', 'לוי', 'מענדי', 'שמואל', 'דוד', 'אברהם', 'ישראל', 'חיים', 'זלמן', 'יצחק'];
+    const last = ['כהן', 'לוי', 'גורדון', 'שפירא', 'רבינוביץ', 'פרידמן', 'גולדברג', 'קפלן', 'וולף', 'הלפרין'];
+    const mothers = ['שרה', 'רבקה', 'חיה', 'לאה', 'מושקא', 'חנה', 'דבורה', 'רחל'];
+    const kids = ['מנחם מענדל', 'שניאור זלמן', 'לוי יצחק', 'יוסף יצחק', 'דובער', 'שמואל', 'אליהו', 'משה'];
+    const regs = [], children = [];
+    const fill = { 'h-meir-2': 10, 'h-meir-0': 6, 'h-wolfson-1': 4, 'h-wolfson-3': 9, 'h-meir-4': 2, 'h-soroka-0': 3, 'h-kaplan-1': 10, 'h-kaplan-3': 5 };
+    let n = 0;
+    Object.entries(fill).forEach(([shift_id, count]) => {
+      for (let i = 0; i < count; i++, n++) {
+        const id = uid(), ln = last[n % last.length];
+        regs.push({
+          id, shift_id, father_first: first[n % first.length], father_last: ln,
+          father_mother: mothers[n % mothers.length], phone: '05' + (2 + n % 7) + '-' + String(1000000 + n * 7919).slice(-7),
+          city: OPTIONS.city[n % OPTIONS.city.length], status: 'active',
+          created_at: new Date(Date.now() - (60 - n) * 3600e3).toISOString(), demo: true,
+        });
+        const k = 1 + (n % 3);
+        for (let j = 0; j < k; j++) children.push({
+          id: uid(), registration_id: id, first_name: kids[(n + j) % kids.length], last_name: ln,
+          mother_name: mothers[(n + 1) % mothers.length], grade: OPTIONS.grade[(n + j * 2) % OPTIONS.grade.length],
+          branch: OPTIONS.branch[n % OPTIONS.branch.length], sort: j,
+        });
+      }
+    });
+    return { hospitals, shifts, regs, children };
+  }
+
+  function load() {
+    try { const s = JSON.parse(localStorage.getItem(KEY)); if (s && s.hospitals) return s; } catch (e) {}
+    const s = seed(); save(s); return s;
+  }
+  let memory = null;
+  function db() { return memory || (memory = load()); }
+  function save(s) { memory = s; try { localStorage.setItem(KEY, JSON.stringify(s)); } catch (e) {} }
+
+  /* ---------------- API ---------------- */
+  async function catalog() {
+    if (DEMO) {
+      const s = db();
+      return { hospitals: s.hospitals, shifts: s.shifts.filter(x => x.active), options: OPTIONS };
+    }
+    const c = await client();
+    const [h, sh, op] = await Promise.all([
+      c.from('hospitals').select('*').eq('active', true).order('sort'),
+      c.from('shifts').select('*').eq('active', true).order('date').order('start_time'),
+      c.from('options').select('*').order('sort'),
+    ]);
+    if (h.error || sh.error || op.error) throw new Error('NETWORK');
+    const options = { city: [], grade: [], branch: [] };
+    op.data.forEach(o => options[o.kind] && options[o.kind].push(o.label));
+    return { hospitals: h.data, shifts: sh.data.map(s => ({ ...s, start_time: s.start_time.slice(0, 5), end_time: s.end_time && s.end_time.slice(0, 5) })), options };
+  }
+
+  async function availability() {
+    if (DEMO) {
+      const s = db(), m = {};
+      s.shifts.forEach(sh => {
+        m[sh.id] = s.regs.filter(r => r.shift_id === sh.id && r.status === 'active').length >= sh.capacity;
+      });
+      return m;
+    }
+    const c = await client();
+    const { data, error } = await c.rpc('get_availability');
+    if (error) throw new Error('NETWORK');
+    const m = {}; data.forEach(r => m[r.shift_id] = r.is_full); return m;
+  }
+
+  async function register(shiftId, father, kids) {
+    if (DEMO) {
+      const s = db(); memory = null; const fresh = db();   // קריאה טרייה, כמו בשרת
+      const sh = fresh.shifts.find(x => x.id === shiftId && x.active);
+      if (!sh) throw new Error('SHIFT_CLOSED');
+      const taken = fresh.regs.filter(r => r.shift_id === shiftId && r.status === 'active').length;
+      if (taken >= sh.capacity) throw new Error('SHIFT_FULL');
+      const id = uid();
+      fresh.regs.push({ id, shift_id: shiftId, father_first: father.first, father_last: father.last,
+        father_mother: father.mother, phone: father.phone, city: father.city, status: 'active',
+        created_at: new Date().toISOString() });
+      kids.forEach((k, i) => fresh.children.push({ id: uid(), registration_id: id, first_name: k.first,
+        last_name: k.last, mother_name: k.mother, grade: k.grade, branch: k.branch, sort: i }));
+      save(fresh); return id;
+    }
+    const c = await client();
+    const { data, error } = await c.rpc('register', { p_shift: shiftId, p_father: father, p_children: kids });
+    if (error) {
+      const m = String(error.message || '');
+      if (m.includes('SHIFT_FULL')) throw new Error('SHIFT_FULL');
+      if (m.includes('SHIFT_CLOSED')) throw new Error('SHIFT_CLOSED');
+      if (m.includes('MISSING_FIELDS') || m.includes('NO_CHILDREN')) throw new Error('MISSING_FIELDS');
+      throw new Error('NETWORK');
+    }
+    return data;
+  }
+
+  /* ---------------- ניהול ---------------- */
+  async function signIn(email, password) {
+    if (DEMO) return true;
+    const c = await client();
+    const { error } = await c.auth.signInWithPassword({ email, password });
+    if (error) throw new Error('AUTH');
+    return true;
+  }
+  async function signOut() { if (!DEMO) await (await client()).auth.signOut(); }
+  async function session() {
+    if (DEMO) return { demo: true };
+    const c = await client(); const { data } = await c.auth.getSession(); return data.session;
+  }
+
+  async function adminData() {
+    if (DEMO) {
+      memory = null; const s = db();
+      return { hospitals: s.hospitals, shifts: s.shifts, regs: s.regs, children: s.children };
+    }
+    const c = await client();
+    const [h, sh, r, ch] = await Promise.all([
+      c.from('hospitals').select('*').order('sort'),
+      c.from('shifts').select('*').order('date').order('start_time'),
+      c.from('registrations').select('*').order('created_at', { ascending: false }),
+      c.from('children').select('*').order('sort'),
+    ]);
+    if (r.error) throw new Error(r.error.code === '42501' ? 'NOT_ADMIN' : 'NETWORK');
+    if (h.error || sh.error || ch.error) throw new Error('NETWORK');
+    return { hospitals: h.data, shifts: sh.data.map(s => ({ ...s, start_time: s.start_time.slice(0, 5), end_time: s.end_time && s.end_time.slice(0, 5) })), regs: r.data, children: ch.data };
+  }
+
+  async function setStatus(id, status) {
+    if (DEMO) {
+      memory = null; const s = db(); const r = s.regs.find(x => x.id === id);
+      if (r) { r.status = status; r.cancelled_at = status === 'cancelled' ? new Date().toISOString() : null; }
+      save(s); return;
+    }
+    const c = await client();
+    const { error } = await c.from('registrations')
+      .update({ status, cancelled_at: status === 'cancelled' ? new Date().toISOString() : null }).eq('id', id);
+    if (error) throw new Error('NETWORK');
+  }
+
+  function resetDemo() { if (DEMO) { try { localStorage.removeItem(KEY); } catch (e) {} memory = null; } }
+
+  return { DEMO, catalog, availability, register, signIn, signOut, session, adminData, setStatus, resetDemo };
+})();
+
+</script>
+<script>
+(() => {
+  const $ = (s, r = document) => r.querySelector(s);
+  const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const WD = ['יום ראשון','יום שני','יום שלישי','יום רביעי','יום חמישי','יום שישי','מוצאי שבת'];
+  const NR = ['','ראשון','שני','שלישי','רביעי','חמישי','שישי','שביעי','שמיני'];
+  // מספר הנר שמדליקים בערב של אותו יום (חנוכה תשפ"ז: נר ראשון בערב 4.12.2026)
+  const candleOf = date => Math.round((new Date(date + 'T12:00:00') - new Date('2026-12-04T12:00:00')) / 864e5) + 1;
+  const gdate = d => { const x = new Date(d + 'T12:00:00'); return x.getDate() + '.' + (x.getMonth() + 1); };
+
+  const st = { step: 1, cat: null, avail: {}, hospital: null, day: null, shift: null, kids: [], father: {} };
+  const pane = $('#pane');
+  if (Data.DEMO) $('#demoBar').hidden = false;
+
+  function setStep(n) {
+    st.step = n;
+    document.querySelectorAll('#progress li').forEach(li => {
+      const s = +li.dataset.s; li.className = s === n ? 'on' : s < n ? 'done' : '';
+    });
+  }
+  function scrollToWizard() {
+    const top = $('#register').getBoundingClientRect().top;
+    if (top < 0 || top > innerHeight * .6) $('#register').scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+  }
+
+  async function refreshAvail() { try { st.avail = await Data.availability(); } catch (e) {} }
+
+  /* ---------- שלב 1 ---------- */
+  function renderHospitals() {
+    setStep(1);
+    const shiftsOf = h => st.cat.shifts.filter(s => s.hospital_id === h.id);
+    pane.innerHTML = `
+      <div class="pane-head"><h3>באיזה בית רפואה?</h3></div>
+      <div class="hosp-list">${st.cat.hospitals.map(h => {
+        const sh = shiftsOf(h);
+        const times = [...new Set(sh.map(s => s.start_time + (s.end_time ? '–' + s.end_time : '')))].join(' / ');
+        const short = h.name.replace(/^בית החולים\s+/, '');
+        return `<button class="hosp" data-id="${esc(h.id)}" aria-label="${esc(h.name)}, ${esc(h.city || '')}">
+          ${short !== h.name ? '<span class="pre-name">בית החולים</span>' : ''}
+          <span class="name">${esc(short)}</span>
+          <span class="meta">${esc(h.city || '')}</span>
+          ${times ? `<span class="hrs">${esc(times)}</span>` : ''}</button>`;
+      }).join('')}</div>`;
+    pane.querySelectorAll('.hosp').forEach(b => b.onclick = () => {
+      st.hospital = st.cat.hospitals.find(h => h.id === b.dataset.id); st.day = null; renderDays();
+    });
+  }
+
+  /* ---------- שלב 2 ---------- */
+  async function renderDays(msg, quiet) {
+    setStep(2);
+    if (!quiet) { scrollToWizard(); await refreshAvail(); }
+    const shifts = st.cat.shifts.filter(s => s.hospital_id === st.hospital.id);
+    const dates = [...new Set(shifts.map(s => s.date))].sort();
+    const dayFull = d => shifts.filter(s => s.date === d).every(s => st.avail[s.id]);
+    pane.innerHTML = `
+      ${msg ? `<div class="alert err">${esc(msg)}</div>` : ''}
+      <div class="pane-head"><div><h3>באיזה יום?</h3><p class="picked">${esc(st.hospital.name)}, ${esc(st.hospital.city || '')}</p></div>
+        <button class="back" id="back">חזרה</button></div>
+      <div class="days">${dates.map(d => {
+        const s0 = shifts.find(s => s.date === d), full = dayFull(d), n = candleOf(d);
+        const wd = new Date(d + 'T12:00:00').getDay();
+        return `<button class="day${st.day === d ? ' sel' : ''}" data-d="${d}" ${full ? 'disabled aria-label="' + esc(s0.heb_date) + ' תפוס"' : ''}>
+          ${full ? '<span class="full">תפוס</span>' : ''}
+          <span class="wd">${WD[wd]}</span><span class="hd">${esc(s0.heb_date)}</span><span class="gd">${gdate(d)}</span>
+          ${n >= 1 && n <= 8 ? `<span class="candles" aria-hidden="true">${Array.from({length: 8}, (_, i) => `<i class="${i < n ? 'lit' : ''}"></i>`).join('')}</span><span class="nr">נר ${NR[n]}</span>` : ''}
+        </button>`;
+      }).join('')}</div>
+      <div id="pop"></div>`;
+    $('#back').onclick = renderHospitals;
+    pane.querySelectorAll('.day').forEach(b => b.onclick = () => {
+      st.day = b.dataset.d;
+      pane.querySelectorAll('.day').forEach(x => x.classList.toggle('sel', x === b));
+      renderShifts(shifts.filter(s => s.date === st.day));
+    });
+    if (st.day && !dayFull(st.day)) renderShifts(shifts.filter(s => s.date === st.day));
+  }
+
+  function renderShifts(list) {
+    $('#pop').innerHTML = `<div class="shift-pop">${list.map(s => {
+      const full = st.avail[s.id];
+      return `<div class="shift-row">
+        <span class="t"><span class="ltr">${esc(s.start_time)}${s.end_time ? '–' + esc(s.end_time) : ''}</span><small>${full ? 'המשמרת מלאה' : 'שעת סיום משוערת'}</small></span>
+        <button class="btn" data-s="${esc(s.id)}" ${full ? 'disabled' : ''}>בחר</button></div>`;
+    }).join('')}</div>`;
+    $('#pop').querySelectorAll('.btn').forEach(b => b.onclick = () => {
+      st.shift = st.cat.shifts.find(s => s.id === b.dataset.s); renderForm();
+    });
+  }
+
+  /* ---------- שלב 3 ---------- */
+  const opt = (list, v) => '<option value="">בחירה…</option>' + list.map(o => `<option${o === v ? ' selected' : ''}>${esc(o)}</option>`).join('');
+  const field = (id, label, val, type = 'text', extra = '') =>
+    `<div class="f"><label for="${id}">${label}</label><input id="${id}" type="${type}" value="${esc(val || '')}" ${extra}><span class="e"></span></div>`;
+  const sel = (id, label, list, val) =>
+    `<div class="f"><label for="${id}">${label}</label><select id="${id}">${opt(list, val)}</select><span class="e"></span></div>`;
+
+  function newKid() { return { first: '', last: st.father.last || '', mother: st.father.mother || '', grade: '', branch: '', lastTouched: false, motherTouched: false }; }
+
+  function renderForm(err) {
+    setStep(3); scrollToWizard();
+    if (!st.kids.length) st.kids = [newKid()];
+    const f = st.father, o = st.cat.options, s = st.shift;
+    pane.innerHTML = `
+      ${err ? `<div class="alert err">${esc(err)}</div>` : ''}
+      <div class="pane-head"><div><h3>פרטי הנרשמים</h3>
+        <p class="picked">${esc(st.hospital.name)} · ${esc(s.heb_date)} · ${esc(s.start_time)}${s.end_time ? '–' + esc(s.end_time) : ''}</p></div>
+        <button class="back" id="back">שינוי יום</button></div>
+      <form id="form" novalidate>
+        <fieldset><legend>פרטי האבא</legend><div class="grid">
+          ${field('f_first', 'שם פרטי', f.first, 'text', 'autocomplete="given-name"')}
+          ${field('f_last', 'שם משפחה', f.last, 'text', 'autocomplete="family-name"')}
+          ${field('f_mother', 'שם האם', f.mother)}
+          ${field('f_phone', 'טלפון נייד', f.phone, 'tel', 'inputmode="tel" autocomplete="tel" dir="ltr" placeholder="050-0000000"')}
+          ${sel('f_city', 'עיר מגורים', o.city, f.city)}
+        </div></fieldset>
+        <fieldset><legend>הילדים שיוצאים</legend>
+          <div id="kids">${st.kids.map((k, i) => `
+            <div class="child" data-i="${i}">
+              <div class="child-head"><h4>ילד ${i + 1}</h4>${st.kids.length > 1 ? `<button type="button" class="rm" data-i="${i}">הסרה</button>` : ''}</div>
+              <div class="grid">
+                ${field('k' + i + '_first', 'שם פרטי', k.first)}
+                ${field('k' + i + '_last', 'שם משפחה', k.last)}
+                ${field('k' + i + '_mother', 'שם האם', k.mother)}
+                ${sel('k' + i + '_grade', 'כיתה', o.grade, k.grade)}
+                ${sel('k' + i + '_branch', 'סניף', o.branch, k.branch)}
+              </div></div>`).join('')}</div>
+          <button type="button" class="add-child" id="addKid">+ הוסף ילד</button>
+        </fieldset>
+        <div class="form-foot"><button class="btn" type="submit" id="submit">לסיום ההרשמה</button></div>
+      </form>`;
+
+    $('#back').onclick = () => { collect(); renderDays(); };
+    $('#addKid').onclick = () => { collect(); st.kids.push(newKid()); renderForm(); $('#k' + (st.kids.length - 1) + '_first').focus(); };
+    pane.querySelectorAll('.rm').forEach(b => b.onclick = () => { collect(); st.kids.splice(+b.dataset.i, 1); renderForm(); });
+
+    // שם משפחה ושם האם של הילדים מתמלאים מהאבא, עד שמשנים ידנית
+    st.kids.forEach((k, i) => {
+      $('#k' + i + '_last').addEventListener('input', () => k.lastTouched = true);
+      $('#k' + i + '_mother').addEventListener('input', () => k.motherTouched = true);
+    });
+    const sync = (src, key, touched) => $(src).addEventListener('input', e => st.kids.forEach((k, i) => {
+      if (!k[touched]) $('#k' + i + '_' + key).value = e.target.value;
+    }));
+    sync('#f_last', 'last', 'lastTouched'); sync('#f_mother', 'mother', 'motherTouched');
+
+    $('#form').onsubmit = submit;
+  }
+
+  function collect() {
+    const v = id => ($('#' + id)?.value || '').trim();
+    st.father = { first: v('f_first'), last: v('f_last'), mother: v('f_mother'), phone: v('f_phone'), city: v('f_city') };
+    st.kids.forEach((k, i) => Object.assign(k, { first: v('k' + i + '_first'), last: v('k' + i + '_last'),
+      mother: v('k' + i + '_mother'), grade: v('k' + i + '_grade'), branch: v('k' + i + '_branch') }));
+  }
+
+  function validate() {
+    let first = null;
+    pane.querySelectorAll('.f').forEach(f => { f.classList.remove('bad'); f.querySelector('.e').textContent = ''; });
+    const bad = (id, msg) => { const f = $('#' + id).closest('.f'); f.classList.add('bad'); f.querySelector('.e').textContent = msg; first = first || id; };
+    const need = (id, val, what) => { if (!val) bad(id, what); };
+    const f = st.father;
+    need('f_first', f.first, 'חסר שם פרטי'); need('f_last', f.last, 'חסר שם משפחה');
+    need('f_mother', f.mother, 'חסר שם האם'); need('f_city', f.city, 'בחרו עיר');
+    const digits = f.phone.replace(/\D/g, '');
+    if (!digits) bad('f_phone', 'חסר מספר טלפון');
+    else if (!/^05\d{8}$/.test(digits)) bad('f_phone', 'מספר נייד צריך 10 ספרות ולהתחיל ב־05');
+    st.kids.forEach((k, i) => {
+      need('k' + i + '_first', k.first, 'חסר שם פרטי'); need('k' + i + '_last', k.last, 'חסר שם משפחה');
+      need('k' + i + '_mother', k.mother, 'חסר שם האם'); need('k' + i + '_grade', k.grade, 'בחרו כיתה');
+      need('k' + i + '_branch', k.branch, 'בחרו סניף');
+    });
+    if (first) $('#' + first).focus();
+    return !first;
+  }
+
+  async function submit(e) {
+    e.preventDefault(); collect();
+    if (!validate()) return;
+    const btn = $('#submit'); btn.disabled = true; btn.textContent = 'שומר…';
+    const father = { ...st.father, phone: st.father.phone.replace(/\D/g, '').replace(/^(\d{3})/, '$1-') };
+    const kids = st.kids.map(({ first, last, mother, grade, branch }) => ({ first, last, mother, grade, branch }));
+    try {
+      const id = await Data.register(st.shift.id, father, kids);
+      renderDone(id, father, kids);
+    } catch (err) {
+      if (err.message === 'SHIFT_FULL' || err.message === 'SHIFT_CLOSED') {
+        st.day = null; renderDays('המקום האחרון ביום הזה נתפס הרגע. הפרטים שמילאתם נשמרו, בחרו יום אחר.');
+      } else if (err.message === 'MISSING_FIELDS') {
+        renderForm('חסרים פרטים. בדקו את השדות ונסו שוב.');
+      } else {
+        btn.disabled = false; btn.textContent = 'לסיום ההרשמה';
+        renderForm('אין חיבור לשרת כרגע. בדקו את האינטרנט ונסו שוב.');
+      }
+    }
+  }
+
+  /* ---------- אישור ---------- */
+  function renderDone(id, father, kids) {
+    setStep(4);
+    document.querySelectorAll('#progress li').forEach(li => li.className = 'done');
+    const s = st.shift;
+    pane.innerHTML = `<div class="done">
+      <div class="check"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></div>
+      <h3>נרשמתם! מחכים לכם.</h3>
+      <p class="picked">שמרו את הפרטים. לשינוי או ביטול פנו לרכז המבצע.</p>
+      <dl class="summary">
+        <dt>בית רפואה</dt><dd>${esc(st.hospital.name)}, ${esc(st.hospital.city || '')}</dd>
+        <dt>יום</dt><dd>${WD[new Date(s.date + 'T12:00:00').getDay()]}, ${esc(s.heb_date)} (${gdate(s.date)})</dd>
+        <dt>שעה</dt><dd>${esc(s.start_time)}${s.end_time ? '–' + esc(s.end_time) : ''}</dd>
+        <dt>אבא</dt><dd>${esc(father.first)} ${esc(father.last)}</dd>
+        <dt>ילדים</dt><dd>${kids.map(k => esc(k.first)).join(', ')}</dd>
+        <dt>מספר הרשמה</dt><dd class="ref">${esc(String(id).slice(0, 6).toUpperCase())}</dd>
+      </dl>
+      <button class="btn ghost" id="again">הרשמה נוספת</button></div>`;
+    scrollToWizard();
+    $('#again').onclick = () => { st.kids = []; st.father = {}; st.day = null; st.shift = null; renderHospitals(); };
+  }
+
+  /* ---------- אנימציית גלילה ---------- */
+  if ('IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.remove('pre'); io.unobserve(e.target); } }), { threshold: .25 });
+    document.querySelectorAll('.rv').forEach((el, i) => {
+      if (el.getBoundingClientRect().top > innerHeight) { el.classList.add('pre'); el.style.transitionDelay = 0 + 'ms'; io.observe(el); }
+    });
+  }
+
+  /* ---------- טעינה ---------- */
+  (async () => {
+    try { st.cat = await Data.catalog(); await refreshAvail(); renderHospitals(); }
+    catch (e) { pane.innerHTML = '<p class="loading">אין חיבור לשרת כרגע. רעננו את הדף בעוד רגע.</p>'; }
+    // רענון תפוסה כל 20 שניות כשמסתכלים על הימים
+    setInterval(async () => {
+      if (st.step !== 2) return;
+      const before = JSON.stringify(st.avail); await refreshAvail();
+      if (JSON.stringify(st.avail) !== before) renderDays(null, true);
+    }, 20000);
+  })();
+})();
+</script>
+
+</body>
+</html>

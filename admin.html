@@ -1,0 +1,585 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<meta name="description" content="הרשמה למבצעי חנוכה עם אבא בבתי הרפואה – פנסאים ולב חב"ד">
+<meta property="og:title" content="מבצע חנוכה עם אבא!">
+<meta property="og:description" content="הרשמה למבצעי חנוכה עם אבא בבתי הרפואה – פנסאים ולב חב"ד">
+<meta property="og:image" content="https://shmulikc-arch.github.io/mivtzachanuka/ad.jpg">
+<meta name="theme-color" content="#3A2716">
+<style>[hidden]{display:none!important}body{margin:0}img{max-width:100%}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}</style>
+</head>
+<body>
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>[hidden]{display:none!important}body{margin:0}</style>
+</head>
+<body>
+<title>ניהול מבצעי חנוכה</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rubik:wght@700;800;900&family=Assistant:wght@400;600;700;800&display=swap">
+<style>
+/* Layout: operations console in the campaign palette — summary tiles, occupancy grid, registrations table. */
+:root{
+  --bg:#3A2716; --surface:rgba(74,50,30,.78); --raise:rgba(255,214,150,.09); --ink:#FFF7EA; --muted:#EBD9BC; --line:rgba(255,200,110,.24);
+  --primary:#FFC21A; --on-primary:#2A1806; --flame:#FFB000; --flame-soft:#6A4E26;
+  --gold-a:#FFE24A; --gold-b:#F59E0B; --gold-t1:#FFE24A; --gold-t2:#F59E0B; --coral-a:#F16C4D; --coral-b:#D4393D;
+  --ok:#7DD3A0; --ok-soft:#2F4A35; --err:#FF8E7E; --err-soft:#5E2E25; --warn:#FFC21A; --warn-soft:#6A4E26;
+  --display:"Rubik", "Assistant", "Arial Hebrew", Arial, sans-serif;
+  --body:"Assistant", "Arial Hebrew", Arial, sans-serif;
+  --r:14px; color-scheme:dark;
+}
+
+*{box-sizing:border-box}
+body{background:
+    radial-gradient(900px 520px at 50% -4%, rgba(255,176,60,.42), transparent 70%),
+    radial-gradient(620px 520px at 105% 38%, rgba(214,72,52,.22), transparent 70%),
+    radial-gradient(640px 560px at -6% 72%, rgba(255,190,70,.16), transparent 70%),
+    linear-gradient(180deg,#5B3B20 0%,#45301C 40%,#352414 100%);
+  background-attachment:fixed;background-color:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5;direction:rtl;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 40px}
+.wrap{max-width:1200px;margin:0 auto;display:flex;flex-direction:column;gap:20px}
+h1,h2{font-family:var(--display);font-weight:800;margin:0;line-height:1.2}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--flame);outline-offset:2px}
+
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding-block:20px 0}
+.top h1{font-size:26px}
+.top .sub{color:var(--muted);font-size:14px}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+.b{background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:7px 16px;font-weight:700;text-decoration:none;color:var(--ink);display:inline-flex;align-items:center;gap:6px}
+.b:hover{border-color:var(--ink)}
+.b.primary{background:linear-gradient(180deg,var(--gold-a),var(--gold-b));color:var(--on-primary);border-color:var(--primary)}
+.b.danger{color:var(--err);border-color:var(--err)}
+.b.sm{padding:4px 12px;font-size:13px}
+.demo{background:var(--flame-soft);border-radius:10px;padding:8px 14px;font-size:14px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center}
+.demo button{background:none;border:0;font-weight:700;text-decoration:underline;padding:0}
+
+#app{display:flex;flex-direction:column;gap:20px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px}
+.card h2{font-size:19px;margin-bottom:12px}
+
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.kpi .v{font-family:var(--display);font-size:32px;line-height:1.1;font-variant-numeric:tabular-nums}
+.kpi .l{color:var(--muted);font-weight:600;font-size:14px}
+
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%}
+.occ th,.occ td{padding:8px;text-align:center;border-bottom:1px solid var(--line)}
+.occ th{font-weight:700;font-size:13px;color:var(--muted);white-space:nowrap}
+.occ th.h{text-align:right;color:var(--ink);font-size:15px;min-width:140px}
+.cell{width:100%;min-width:92px;background:rgba(255,214,150,.12);border:2px solid transparent;border-radius:10px;padding:8px 6px;display:flex;flex-direction:column;gap:5px;align-items:stretch}
+.cell:hover{border-color:var(--primary)}
+.cell.on{border-color:var(--primary)}
+.cell .n{font-weight:800;font-variant-numeric:tabular-nums}
+.cell .bar{height:6px;border-radius:3px;background:var(--line);overflow:hidden;direction:rtl}
+.cell .bar i{display:block;height:100%;background:var(--primary)}
+.cell.full .bar i{background:var(--coral-b)}
+.cell.full .n{color:var(--err)}
+.cell.near .bar i{background:var(--flame)}
+
+.filters{display:flex;gap:10px;flex-wrap:wrap;align-items:end;margin-bottom:14px}
+.filters label{display:flex;flex-direction:column;gap:3px;font-size:13px;font-weight:700;color:var(--muted)}
+.filters input,.filters select{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:7px 10px;min-width:150px;color:var(--ink)}
+.filters .count{margin-inline-start:auto;color:var(--muted);font-weight:600}
+
+.regs th,.regs td{padding:10px 8px;text-align:right;border-bottom:1px solid var(--line);vertical-align:top}
+.regs th{font-size:13px;color:var(--muted);font-weight:700;white-space:nowrap;position:sticky;top:0;background:#4A321E}
+.regs td{font-size:14px}
+.regs .who{font-weight:800}
+.regs .muted{color:var(--muted);font-size:13px}
+.regs .ph{direction:ltr;unicode-bidi:isolate;font-variant-numeric:tabular-nums;white-space:nowrap}
+.kids{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:2px}
+.kids li{white-space:nowrap}
+tr.cancelled td{opacity:.5}
+tr.cancelled td:last-child{opacity:1}
+.pill{display:inline-block;border-radius:999px;padding:1px 10px;font-size:12px;font-weight:800}
+.pill.ok{background:var(--ok-soft);color:var(--ok)}
+.pill.x{background:var(--err-soft);color:var(--err)}
+.confirm{display:flex;gap:6px;align-items:center;flex-wrap:wrap;font-weight:700;font-size:13px}
+.empty{color:var(--muted);text-align:center;padding:30px}
+.toast{position:fixed;bottom:calc(20px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:999px;font-weight:700;z-index:20}
+
+.login{max-width:380px;margin:60px auto;display:flex;flex-direction:column;gap:12px}
+.login input{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.err{color:var(--err);font-weight:600;font-size:14px}
+
+@media (max-width:760px){.kpis{grid-template-columns:repeat(2,1fr)}.filters input,.filters select{min-width:0;width:100%}.filters label{flex:1 1 140px}}
+#sparkle{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:0}
+.wrap{position:relative;z-index:1}
+.card,.kpi{backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.filters select option{background:#3A2716}
+</style>
+
+<canvas id="sparkle" aria-hidden="true"></canvas>
+<script>
+(() => {
+  const c = document.getElementById('sparkle'), x = c.getContext('2d');
+  const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let W, H, dpr, P = [];
+  function size() {
+    dpr = Math.min(2, devicePixelRatio || 1); W = innerWidth; H = innerHeight;
+    c.width = W * dpr; c.height = H * dpr; x.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const n = Math.round(Math.min(110, W * H / 9000));
+    P = Array.from({ length: n }, () => ({
+      x: Math.random() * W, y: Math.random() * H, r: Math.random() * 1.6 + .4,
+      s: Math.random() * .25 + .05, t: Math.random() * 6.28, v: Math.random() * .03 + .01,
+      big: Math.random() < .12
+    }));
+  }
+  function draw() {
+    x.clearRect(0, 0, W, H);
+    for (const p of P) {
+      const a = .35 + .65 * Math.abs(Math.sin(p.t));
+      const r = p.big ? p.r * 2.2 : p.r;
+      const g = x.createRadialGradient(p.x, p.y, 0, p.x, p.y, r * 4);
+      g.addColorStop(0, `rgba(255,232,150,${a})`); g.addColorStop(.35, `rgba(255,190,70,${a * .45})`); g.addColorStop(1, 'rgba(255,170,40,0)');
+      x.fillStyle = g; x.beginPath(); x.arc(p.x, p.y, r * 4, 0, 6.283); x.fill();
+      if (p.big && a > .8) { x.strokeStyle = `rgba(255,240,190,${(a - .8) * 3})`; x.lineWidth = .7;
+        x.beginPath(); x.moveTo(p.x - r * 5, p.y); x.lineTo(p.x + r * 5, p.y); x.moveTo(p.x, p.y - r * 5); x.lineTo(p.x, p.y + r * 5); x.stroke(); }
+      if (!still) { p.t += p.v; p.y -= p.s; if (p.y < -10) { p.y = H + 10; p.x = Math.random() * W; } }
+    }
+    if (!still && document.visibilityState === 'visible') requestAnimationFrame(draw);
+  }
+  addEventListener('resize', () => { size(); if (still) draw(); });
+  document.addEventListener('visibilitychange', () => { if (!still && document.visibilityState === 'visible') requestAnimationFrame(draw); });
+  size(); draw();
+})();
+</script>
+<div class="wrap">
+  <div class="top">
+    <div><h1>ניהול מבצעי חנוכה</h1><div class="sub">פנסאים × לב חב"ד · הרשמות לבתי הרפואה</div></div>
+    <div class="actions" id="topActions" hidden>
+      <a class="b" href="index.html" target="_blank" rel="noopener">לדף ההרשמה</a>
+      <button class="b" id="refresh">רענון</button>
+      <button class="b" id="copyCsv">העתקת הטבלה</button>
+      <button class="b primary" id="exportCsv">ייצוא לאקסל</button>
+      <button class="b" id="logout" hidden>יציאה</button>
+    </div>
+  </div>
+  <div class="demo" id="demo" hidden><span>מצב הדגמה: הנתונים לדוגמה ונשמרים רק בדפדפן הזה.</span><button id="reset">איפוס נתוני ההדגמה</button></div>
+  <div id="app"><p class="empty">טוען…</p></div>
+</div>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+/* ============================================================
+   שכבת נתונים משותפת לדף ההרשמה ולדשבורד
+   אם SUPABASE_URL ריק → מצב הדגמה (נשמר בדפדפן בלבד)
+   ============================================================ */
+const CONFIG = {
+  SUPABASE_URL: '',        // https://xxxx.supabase.co
+  SUPABASE_ANON_KEY: '',   // anon public key
+};
+
+const Data = (() => {
+  const DEMO = !CONFIG.SUPABASE_URL || !CONFIG.SUPABASE_ANON_KEY;
+  let sb = null;
+
+  async function client() {
+    if (sb) return sb;
+    if (!window.supabase) {
+      await new Promise((ok, fail) => {
+        const s = document.createElement('script');
+        s.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js';
+        s.onload = ok; s.onerror = () => fail(new Error('NETWORK'));
+        document.head.appendChild(s);
+      });
+    }
+    sb = window.supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY);
+    return sb;
+  }
+
+  /* ---------------- מצב הדגמה ---------------- */
+  const KEY = 'pansaim_demo_v2';
+  const uid = () => 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+    const r = Math.random() * 16 | 0; return (c === 'x' ? r : (r & 3 | 8)).toString(16);
+  });
+  const DAYS = [
+    ['2026-12-06', 'כ"ו כסלו'], ['2026-12-07', 'כ"ז כסלו'], ['2026-12-08', 'כ"ח כסלו'],
+    ['2026-12-09', 'כ"ט כסלו'], ['2026-12-10', "ל' כסלו"],
+  ];
+  const OPTIONS = {
+    city: ['בני ברק', 'ירושלים', 'כפר חב"ד', 'פתח תקווה', 'כפר סבא', 'חולון', 'רחובות', 'לוד', 'ראשון לציון', 'בת ים'],
+    grade: ['גן', "א'", "ב'", "ג'", "ד'", "ה'", "ו'", "ז'", "ח'"],
+    branch: ['סניף בני ברק', 'סניף ירושלים', 'סניף כפר חב"ד', 'סניף פתח תקווה', 'סניף כפר סבא',
+             'סניף חולון', 'סניף רחובות', 'סניף לוד', 'סניף ראשון לציון', 'סניף בת ים'],
+  };
+
+  function seed() {
+    const hospitals = [
+      { id: 'h-meir', name: 'בית החולים מאיר', city: 'כפר סבא', sort: 1 },
+      { id: 'h-wolfson', name: 'בית החולים וולפסון', city: 'חולון', sort: 2 },
+      { id: 'h-soroka', name: 'בית החולים סורוקה', city: 'באר שבע', sort: 3 },
+      { id: 'h-kaplan', name: 'בית החולים קפלן', city: 'רחובות', sort: 4 },
+    ];
+    const shifts = [];
+    hospitals.forEach(h => DAYS.forEach(([date, heb], i) => shifts.push({
+      id: `${h.id}-${i}`, hospital_id: h.id, date, heb_date: heb,
+      start_time: '16:30', end_time: '18:30', capacity: 10, active: true,
+    })));
+    // נרשמים לדוגמה: יום אחד מלא כדי לראות "תפוס"
+    const first = ['מנחם', 'יוסף', 'שניאור', 'לוי', 'מענדי', 'שמואל', 'דוד', 'אברהם', 'ישראל', 'חיים', 'זלמן', 'יצחק'];
+    const last = ['כהן', 'לוי', 'גורדון', 'שפירא', 'רבינוביץ', 'פרידמן', 'גולדברג', 'קפלן', 'וולף', 'הלפרין'];
+    const mothers = ['שרה', 'רבקה', 'חיה', 'לאה', 'מושקא', 'חנה', 'דבורה', 'רחל'];
+    const kids = ['מנחם מענדל', 'שניאור זלמן', 'לוי יצחק', 'יוסף יצחק', 'דובער', 'שמואל', 'אליהו', 'משה'];
+    const regs = [], children = [];
+    const fill = { 'h-meir-2': 10, 'h-meir-0': 6, 'h-wolfson-1': 4, 'h-wolfson-3': 9, 'h-meir-4': 2, 'h-soroka-0': 3, 'h-kaplan-1': 10, 'h-kaplan-3': 5 };
+    let n = 0;
+    Object.entries(fill).forEach(([shift_id, count]) => {
+      for (let i = 0; i < count; i++, n++) {
+        const id = uid(), ln = last[n % last.length];
+        regs.push({
+          id, shift_id, father_first: first[n % first.length], father_last: ln,
+          father_mother: mothers[n % mothers.length], phone: '05' + (2 + n % 7) + '-' + String(1000000 + n * 7919).slice(-7),
+          city: OPTIONS.city[n % OPTIONS.city.length], status: 'active',
+          created_at: new Date(Date.now() - (60 - n) * 3600e3).toISOString(), demo: true,
+        });
+        const k = 1 + (n % 3);
+        for (let j = 0; j < k; j++) children.push({
+          id: uid(), registration_id: id, first_name: kids[(n + j) % kids.length], last_name: ln,
+          mother_name: mothers[(n + 1) % mothers.length], grade: OPTIONS.grade[(n + j * 2) % OPTIONS.grade.length],
+          branch: OPTIONS.branch[n % OPTIONS.branch.length], sort: j,
+        });
+      }
+    });
+    return { hospitals, shifts, regs, children };
+  }
+
+  function load() {
+    try { const s = JSON.parse(localStorage.getItem(KEY)); if (s && s.hospitals) return s; } catch (e) {}
+    const s = seed(); save(s); return s;
+  }
+  let memory = null;
+  function db() { return memory || (memory = load()); }
+  function save(s) { memory = s; try { localStorage.setItem(KEY, JSON.stringify(s)); } catch (e) {} }
+
+  /* ---------------- API ---------------- */
+  async function catalog() {
+    if (DEMO) {
+      const s = db();
+      return { hospitals: s.hospitals, shifts: s.shifts.filter(x => x.active), options: OPTIONS };
+    }
+    const c = await client();
+    const [h, sh, op] = await Promise.all([
+      c.from('hospitals').select('*').eq('active', true).order('sort'),
+      c.from('shifts').select('*').eq('active', true).order('date').order('start_time'),
+      c.from('options').select('*').order('sort'),
+    ]);
+    if (h.error || sh.error || op.error) throw new Error('NETWORK');
+    const options = { city: [], grade: [], branch: [] };
+    op.data.forEach(o => options[o.kind] && options[o.kind].push(o.label));
+    return { hospitals: h.data, shifts: sh.data.map(s => ({ ...s, start_time: s.start_time.slice(0, 5), end_time: s.end_time && s.end_time.slice(0, 5) })), options };
+  }
+
+  async function availability() {
+    if (DEMO) {
+      const s = db(), m = {};
+      s.shifts.forEach(sh => {
+        m[sh.id] = s.regs.filter(r => r.shift_id === sh.id && r.status === 'active').length >= sh.capacity;
+      });
+      return m;
+    }
+    const c = await client();
+    const { data, error } = await c.rpc('get_availability');
+    if (error) throw new Error('NETWORK');
+    const m = {}; data.forEach(r => m[r.shift_id] = r.is_full); return m;
+  }
+
+  async function register(shiftId, father, kids) {
+    if (DEMO) {
+      const s = db(); memory = null; const fresh = db();   // קריאה טרייה, כמו בשרת
+      const sh = fresh.shifts.find(x => x.id === shiftId && x.active);
+      if (!sh) throw new Error('SHIFT_CLOSED');
+      const taken = fresh.regs.filter(r => r.shift_id === shiftId && r.status === 'active').length;
+      if (taken >= sh.capacity) throw new Error('SHIFT_FULL');
+      const id = uid();
+      fresh.regs.push({ id, shift_id: shiftId, father_first: father.first, father_last: father.last,
+        father_mother: father.mother, phone: father.phone, city: father.city, status: 'active',
+        created_at: new Date().toISOString() });
+      kids.forEach((k, i) => fresh.children.push({ id: uid(), registration_id: id, first_name: k.first,
+        last_name: k.last, mother_name: k.mother, grade: k.grade, branch: k.branch, sort: i }));
+      save(fresh); return id;
+    }
+    const c = await client();
+    const { data, error } = await c.rpc('register', { p_shift: shiftId, p_father: father, p_children: kids });
+    if (error) {
+      const m = String(error.message || '');
+      if (m.includes('SHIFT_FULL')) throw new Error('SHIFT_FULL');
+      if (m.includes('SHIFT_CLOSED')) throw new Error('SHIFT_CLOSED');
+      if (m.includes('MISSING_FIELDS') || m.includes('NO_CHILDREN')) throw new Error('MISSING_FIELDS');
+      throw new Error('NETWORK');
+    }
+    return data;
+  }
+
+  /* ---------------- ניהול ---------------- */
+  async function signIn(email, password) {
+    if (DEMO) return true;
+    const c = await client();
+    const { error } = await c.auth.signInWithPassword({ email, password });
+    if (error) throw new Error('AUTH');
+    return true;
+  }
+  async function signOut() { if (!DEMO) await (await client()).auth.signOut(); }
+  async function session() {
+    if (DEMO) return { demo: true };
+    const c = await client(); const { data } = await c.auth.getSession(); return data.session;
+  }
+
+  async function adminData() {
+    if (DEMO) {
+      memory = null; const s = db();
+      return { hospitals: s.hospitals, shifts: s.shifts, regs: s.regs, children: s.children };
+    }
+    const c = await client();
+    const [h, sh, r, ch] = await Promise.all([
+      c.from('hospitals').select('*').order('sort'),
+      c.from('shifts').select('*').order('date').order('start_time'),
+      c.from('registrations').select('*').order('created_at', { ascending: false }),
+      c.from('children').select('*').order('sort'),
+    ]);
+    if (r.error) throw new Error(r.error.code === '42501' ? 'NOT_ADMIN' : 'NETWORK');
+    if (h.error || sh.error || ch.error) throw new Error('NETWORK');
+    return { hospitals: h.data, shifts: sh.data.map(s => ({ ...s, start_time: s.start_time.slice(0, 5), end_time: s.end_time && s.end_time.slice(0, 5) })), regs: r.data, children: ch.data };
+  }
+
+  async function setStatus(id, status) {
+    if (DEMO) {
+      memory = null; const s = db(); const r = s.regs.find(x => x.id === id);
+      if (r) { r.status = status; r.cancelled_at = status === 'cancelled' ? new Date().toISOString() : null; }
+      save(s); return;
+    }
+    const c = await client();
+    const { error } = await c.from('registrations')
+      .update({ status, cancelled_at: status === 'cancelled' ? new Date().toISOString() : null }).eq('id', id);
+    if (error) throw new Error('NETWORK');
+  }
+
+  function resetDemo() { if (DEMO) { try { localStorage.removeItem(KEY); } catch (e) {} memory = null; } }
+
+  return { DEMO, catalog, availability, register, signIn, signOut, session, adminData, setStatus, resetDemo };
+})();
+
+</script>
+<script>
+(() => {
+  const $ = s => document.querySelector(s);
+  const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const WD = ['א׳','ב׳','ג׳','ד׳','ה׳','ו׳','ש׳'];
+  const gdate = d => { const x = new Date(d + 'T12:00:00'); return x.getDate() + '.' + (x.getMonth() + 1); };
+  const when = iso => { const d = new Date(iso); return d.toLocaleDateString('he-IL', { day: 'numeric', month: 'numeric' }) + ' ' + d.toLocaleTimeString('he-IL', { hour: '2-digit', minute: '2-digit' }); };
+  const app = $('#app');
+  let D = null, F = { q: '', hospital: '', date: '', status: 'active' }, confirmId = null;
+
+  function toast(msg) { const t = $('#toast'); t.textContent = msg; t.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => t.hidden = true, 2600); }
+
+  /* ---------- כניסה ---------- */
+  function renderLogin(err) {
+    $('#topActions').hidden = true;
+    app.innerHTML = `<form class="card login" id="lf">
+      <h2>כניסת מנהלים</h2>
+      <input id="em" type="email" placeholder="מייל" autocomplete="username" dir="ltr" required>
+      <input id="pw" type="password" placeholder="סיסמה" autocomplete="current-password" dir="ltr" required>
+      ${err ? `<div class="err">${esc(err)}</div>` : ''}
+      <button class="b primary" type="submit">כניסה</button></form>`;
+    $('#lf').onsubmit = async e => {
+      e.preventDefault();
+      try { await Data.signIn($('#em').value.trim(), $('#pw').value); load(); }
+      catch (x) { renderLogin('המייל או הסיסמה לא נכונים.'); }
+    };
+  }
+
+  async function load() {
+    try { D = await Data.adminData(); }
+    catch (e) {
+      if (e.message === 'NOT_ADMIN') { await Data.signOut(); return renderLogin('המשתמש הזה לא מוגדר כמנהל.'); }
+      app.innerHTML = '<p class="empty">אין חיבור לשרת. נסו לרענן.</p>'; return;
+    }
+    $('#topActions').hidden = false; $('#logout').hidden = Data.DEMO;
+    render();
+  }
+
+  /* ---------- חישובים ---------- */
+  const active = () => D.regs.filter(r => r.status === 'active');
+  const takenOf = id => D.regs.filter(r => r.shift_id === id && r.status === 'active').length;
+  const kidsOf = id => D.children.filter(c => c.registration_id === id).sort((a, b) => a.sort - b.sort);
+  const shiftOf = id => D.shifts.find(s => s.id === id) || {};
+  const hospOf = id => D.hospitals.find(h => h.id === id) || {};
+  const dates = () => [...new Set(D.shifts.map(s => s.date))].sort();
+
+  function filtered() {
+    const q = F.q.trim().toLowerCase();
+    return D.regs.filter(r => {
+      const s = shiftOf(r.shift_id);
+      if (F.status !== 'all' && r.status !== F.status) return false;
+      if (F.hospital && s.hospital_id !== F.hospital) return false;
+      if (F.date && s.date !== F.date) return false;
+      if (q) {
+        const hay = [r.father_first, r.father_last, r.father_mother, r.phone, r.city,
+          ...kidsOf(r.id).flatMap(k => [k.first_name, k.last_name, k.branch])].join(' ').toLowerCase();
+        if (!hay.includes(q) && !hay.replace(/-/g, '').includes(q.replace(/-/g, ''))) return false;
+      }
+      return true;
+    }).sort((a, b) => {
+      const sa = shiftOf(a.shift_id), sb = shiftOf(b.shift_id);
+      return (sa.date + sa.start_time).localeCompare(sb.date + sb.start_time) || a.created_at.localeCompare(b.created_at);
+    });
+  }
+
+  /* ---------- תצוגה ---------- */
+  function render() {
+    const act = active(), kids = D.children.filter(c => act.some(r => r.id === c.registration_id)).length;
+    const live = D.shifts.filter(s => s.active !== false);
+    const full = live.filter(s => takenOf(s.id) >= s.capacity).length;
+    const cap = live.reduce((a, s) => a + s.capacity, 0);
+    const ds = dates();
+
+    app.innerHTML = `
+      <div class="kpis">
+        <div class="kpi"><div class="v">${act.length}</div><div class="l">אבות רשומים</div></div>
+        <div class="kpi"><div class="v">${kids}</div><div class="l">ילדים</div></div>
+        <div class="kpi"><div class="v">${cap - act.length}</div><div class="l">מקומות פנויים מתוך ${cap}</div></div>
+        <div class="kpi"><div class="v">${full}/${live.length}</div><div class="l">משמרות מלאות</div></div>
+      </div>
+
+      <div class="card"><h2>תפוסה לפי יום</h2><div class="scroll"><table class="occ">
+        <thead><tr><th class="h">בית רפואה</th>${ds.map(d => {
+          const s = D.shifts.find(x => x.date === d);
+          return `<th>יום ${WD[new Date(d + 'T12:00:00').getDay()]} · ${esc(s.heb_date)}<br><span style="font-weight:600">${gdate(d)}</span></th>`;
+        }).join('')}</tr></thead>
+        <tbody>${D.hospitals.map(h => `<tr><th class="h">${esc(h.name)}<br><span class="sub" style="font-weight:600;color:var(--muted)">${esc(h.city || '')}</span></th>${ds.map(d => {
+          const ss = D.shifts.filter(s => s.hospital_id === h.id && s.date === d);
+          if (!ss.length) return '<td>—</td>';
+          return `<td>${ss.map(s => {
+            const t = takenOf(s.id), pct = Math.min(100, t / s.capacity * 100);
+            const cls = t >= s.capacity ? 'full' : t >= s.capacity - 2 ? 'near' : '';
+            const on = F.hospital === h.id && F.date === d;
+            return `<button class="cell ${cls} ${on ? 'on' : ''}" data-h="${esc(h.id)}" data-d="${d}" title="${esc(s.start_time)}${s.end_time ? '–' + esc(s.end_time) : ''}">
+              <span class="n">${t}/${s.capacity}${t >= s.capacity ? ' · מלא' : ''}</span><span class="bar"><i style="width:${pct}%"></i></span></button>`;
+          }).join('')}</td>`;
+        }).join('')}</tr>`).join('')}</tbody></table></div></div>
+
+      <div class="card"><h2>נרשמים</h2>
+        <div class="filters">
+          <label>חיפוש<input id="q" type="search" placeholder="שם, טלפון, סניף…" value="${esc(F.q)}"></label>
+          <label>בית רפואה<select id="fh"><option value="">הכל</option>${D.hospitals.map(h => `<option value="${esc(h.id)}"${F.hospital === h.id ? ' selected' : ''}>${esc(h.name)}</option>`).join('')}</select></label>
+          <label>יום<select id="fd"><option value="">הכל</option>${ds.map(d => `<option value="${d}"${F.date === d ? ' selected' : ''}>${esc(D.shifts.find(s => s.date === d).heb_date)} (${gdate(d)})</option>`).join('')}</select></label>
+          <label>סטטוס<select id="fs">
+            <option value="active"${F.status === 'active' ? ' selected' : ''}>רשומים</option>
+            <option value="cancelled"${F.status === 'cancelled' ? ' selected' : ''}>בוטלו</option>
+            <option value="all"${F.status === 'all' ? ' selected' : ''}>הכל</option></select></label>
+          <button class="b sm" id="clear">ניקוי סינון</button>
+          <span class="count" id="count"></span>
+        </div>
+        <div class="scroll" id="tbl"></div>
+      </div>`;
+
+    app.querySelectorAll('.cell').forEach(b => b.onclick = () => {
+      const same = F.hospital === b.dataset.h && F.date === b.dataset.d;
+      F.hospital = same ? '' : b.dataset.h; F.date = same ? '' : b.dataset.d; render();
+      if (!same) $('#tbl').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+    $('#q').oninput = e => { F.q = e.target.value; renderTable(); };
+    $('#fh').onchange = e => { F.hospital = e.target.value; render(); };
+    $('#fd').onchange = e => { F.date = e.target.value; render(); };
+    $('#fs').onchange = e => { F.status = e.target.value; renderTable(); };
+    $('#clear').onclick = () => { F = { q: '', hospital: '', date: '', status: 'active' }; render(); };
+    renderTable();
+  }
+
+  function renderTable() {
+    const rows = filtered();
+    const kidCount = rows.reduce((a, r) => a + kidsOf(r.id).length, 0);
+    $('#count').textContent = `${rows.length} אבות · ${kidCount} ילדים`;
+    if (!rows.length) { $('#tbl').innerHTML = '<p class="empty">אין נרשמים שמתאימים לסינון.</p>'; return; }
+    $('#tbl').innerHTML = `<table class="regs"><thead><tr>
+      <th>אבא</th><th>טלפון</th><th>עיר</th><th>ילדים</th><th>בית רפואה ויום</th><th>נרשם</th><th></th></tr></thead><tbody>
+      ${rows.map(r => {
+        const s = shiftOf(r.shift_id), h = hospOf(s.hospital_id), ks = kidsOf(r.id);
+        const cancelled = r.status === 'cancelled';
+        let act;
+        if (confirmId === r.id) act = `<span class="confirm">${cancelled ? 'להחזיר?' : 'לבטל את ההרשמה?'}
+          <button class="b sm ${cancelled ? 'primary' : 'danger'}" data-yes="${esc(r.id)}">כן</button><button class="b sm" data-no>לא</button></span>`;
+        else act = cancelled ? `<span class="pill x">בוטל</span> <button class="b sm" data-ask="${esc(r.id)}">החזרה</button>`
+                             : `<button class="b sm danger" data-ask="${esc(r.id)}">ביטול</button>`;
+        return `<tr class="${cancelled ? 'cancelled' : ''}">
+          <td><div class="who">${esc(r.father_first)} ${esc(r.father_last)}</div><div class="muted">בן ${esc(r.father_mother)}</div></td>
+          <td class="ph">${esc(r.phone)}</td>
+          <td>${esc(r.city)}</td>
+          <td><ul class="kids">${ks.map(k => `<li><b>${esc(k.first_name)} ${esc(k.last_name)}</b> <span class="muted">${esc(k.grade)} · ${esc(k.branch)}</span></li>`).join('')}</ul></td>
+          <td>${esc(h.name)}<div class="muted">${esc(s.heb_date)} · ${esc(s.start_time)}</div></td>
+          <td class="muted">${esc(when(r.created_at))}</td>
+          <td>${act}</td></tr>`;
+      }).join('')}</tbody></table>`;
+
+    $('#tbl').querySelectorAll('[data-ask]').forEach(b => b.onclick = () => { confirmId = b.dataset.ask; renderTable(); });
+    $('#tbl').querySelectorAll('[data-no]').forEach(b => b.onclick = () => { confirmId = null; renderTable(); });
+    $('#tbl').querySelectorAll('[data-yes]').forEach(b => b.onclick = async () => {
+      const r = D.regs.find(x => x.id === b.dataset.yes); confirmId = null;
+      const to = r.status === 'cancelled' ? 'active' : 'cancelled';
+      if (to === 'active') {
+        const s = shiftOf(r.shift_id);
+        if (takenOf(s.id) >= s.capacity) { toast('המשמרת מלאה. אי אפשר להחזיר את ההרשמה.'); renderTable(); return; }
+      }
+      try { await Data.setStatus(r.id, to); toast(to === 'cancelled' ? 'ההרשמה בוטלה והמקום התפנה' : 'ההרשמה הוחזרה'); await load(); }
+      catch (e) { toast('השינוי לא נשמר. בדקו חיבור ונסו שוב.'); renderTable(); }
+    });
+  }
+
+  /* ---------- ייצוא: שורה לכל ילד ---------- */
+  function csv() {
+    const head = ['בית רפואה', 'עיר בית רפואה', 'תאריך עברי', 'תאריך', 'שעה', 'שם האב', 'שם משפחה', 'שם האם (אב)', 'טלפון', 'עיר',
+      'שם הילד', 'שם משפחה (ילד)', 'שם האם (ילד)', 'כיתה', 'סניף', 'סטטוס', 'נרשם ב'];
+    const q = v => /[",\n]/.test(String(v ?? '')) ? '"' + String(v).replace(/"/g, '""') + '"' : String(v ?? '');
+    const lines = [head.map(q).join(',')];
+    filtered().forEach(r => {
+      const s = shiftOf(r.shift_id), h = hospOf(s.hospital_id), ks = kidsOf(r.id);
+      (ks.length ? ks : [{}]).forEach(k => lines.push([h.name, h.city, s.heb_date, gdate(s.date), s.start_time,
+        r.father_first, r.father_last, r.father_mother, r.phone, r.city,
+        k.first_name, k.last_name, k.mother_name, k.grade, k.branch,
+        r.status === 'active' ? 'רשום' : 'בוטל', when(r.created_at)].map(q).join(',')));
+    });
+    return lines.join('\n');
+  }
+  $('#exportCsv').onclick = () => {
+    try {
+      const blob = new Blob(['﻿' + csv()], { type: 'text/csv;charset=utf-8' });
+      const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+      a.download = 'הרשמות-מבצעי-חנוכה.csv'; document.body.appendChild(a); a.click(); a.remove();
+      toast('הקובץ ירד (שורה לכל ילד)');
+    } catch (e) { toast('ההורדה חסומה כאן. השתמשו ב"העתקת הטבלה".'); }
+  };
+  $('#copyCsv').onclick = async () => {
+    const text = csv().replace(/,/g, '\t');
+    try { await navigator.clipboard.writeText(text); toast('הועתק. אפשר להדביק בגוגל שיטס או באקסל.'); }
+    catch (e) { toast('ההעתקה נחסמה בדפדפן הזה.'); }
+  };
+  $('#refresh').onclick = () => load().then(() => toast('עודכן'));
+  $('#logout').onclick = async () => { await Data.signOut(); renderLogin(); };
+  $('#reset').onclick = () => { Data.resetDemo(); load(); toast('נתוני ההדגמה אופסו'); };
+
+  (async () => {
+    if (Data.DEMO) $('#demo').hidden = false;
+    let s = null; try { s = await Data.session(); } catch (e) {}
+    if (!s) return renderLogin();
+    load();
+    setInterval(() => { if (!confirmId && document.visibilityState === 'visible' && !/INPUT|SELECT/.test(document.activeElement?.tagName)) Data.adminData().then(d => { D = d; render(); }).catch(() => {}); }, 30000);
+  })();
+})();
+</script>
+
+</body>
+</html>
+
+</body>
+</html>
