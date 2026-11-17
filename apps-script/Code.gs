@@ -9,6 +9,9 @@
  * 3. להעתיק את הכתובת שמסתיימת ב־/exec ולשלוח לשמוליק (נכנסת ל־SCRIPT_URL באתר).
  *
  * ביטול הרשמה: לכתוב "בוטל" בעמודת "סטטוס" בגיליון "הרשמות". המקום מתפנה מיד.
+ *
+ * לוח שיבוץ: גיליון "לוח שיבוץ" מתעדכן לבד אחרי כל הרשמה ואחרי כל שינוי בגיליון "הרשמות".
+ * אפשר גם לרענן ידנית מהתפריט "מבצע חנוכה" שבראש השיטס.
  */
 
 const CAPACITY = 10;
@@ -16,6 +19,14 @@ const CAPACITY = 10;
 // חייב להתאים לרשימה ב־index.html
 const HOSPITALS = { kaplan: 'בית החולים קפלן', wolfson: 'בית החולים וולפסון' };
 const DATES = ['2026-12-06', '2026-12-07', '2026-12-08', '2026-12-09', '2026-12-10'];
+
+// לתצוגת הלוח בלבד
+const BOARD = [
+  { id: 'kaplan',  title: 'בית החולים קפלן · רחובות · 17:00–19:00' },
+  { id: 'wolfson', title: 'בית החולים וולפסון · חולון · 16:30–18:30' },
+];
+const DAY_LABELS = ['ראשון · כ"ו כסלו', 'שני · כ"ז כסלו', 'שלישי · כ"ח כסלו', 'רביעי · כ"ט כסלו', "חמישי · ל' כסלו"];
+const BOARD_SHEET = 'לוח שיבוץ';
 
 const REG_SHEET = 'הרשמות';
 const KIDS_SHEET = 'ילדים';
@@ -96,14 +107,88 @@ function doPost(e) {
     children.forEach(k => ks.appendRow([id, hospital, clean(body.heb_date, 20), k.first, k.last, k.mother, k.grade, k.branch,
       father.first + ' ' + father.last, "'" + father.phone, 'רשום']));
     SpreadsheetApp.flush();
+    try { buildBoard(); } catch (err) {}   // הלוח לא יעצור הרשמה
     return json({ ok: true, id: id });
   } finally {
     lock.releaseLock();
   }
 }
 
-/** להרצה ידנית פעם אחת (לא חובה): יוצר את שני הגיליונות עם הכותרות. */
+/** להרצה ידנית פעם אחת: יוצר את הגיליונות ובונה את הלוח. */
 function setup() {
   sheet(REG_SHEET, REG_HEAD);
   sheet(KIDS_SHEET, KIDS_HEAD);
+  buildBoard();
+}
+
+/* ============================================================
+   לוח שיבוץ: עמודה לכל יום, עד 10 משבצות, לוח לכל בית רפואה
+   ============================================================ */
+function buildBoard() {
+  const ss = SpreadsheetApp.getActive();
+  let b = ss.getSheetByName(BOARD_SHEET);
+  if (!b) { b = ss.insertSheet(BOARD_SHEET, 0); b.setRightToLeft(true); }
+
+  // הרשמות פעילות לפי משמרת, לפי סדר ההרשמה
+  const reg = sheet(REG_SHEET, REG_HEAD);
+  const n = reg.getLastRow() - 1;
+  const rows = n > 0 ? reg.getRange(2, 1, n, REG_HEAD.length).getValues() : [];
+  const by = {};
+  rows.forEach(r => {
+    if (String(r[COL_STATUS - 1]).trim() === 'בוטל') return;
+    const id = r[COL_SHIFT - 1]; if (!id) return;
+    const kids = r[11];
+    const line = r[6] + ' ' + r[7] + ' · ' + String(r[9]).replace(/^'/, '') + ' · ' + (kids == 1 ? 'ילד אחד' : kids + ' ילדים');
+    (by[id] = by[id] || []).push(line);
+  });
+
+  const W = DATES.length + 1;
+  b.clear(); b.clearFormats();
+  const merged = b.getRange(1, 1, b.getMaxRows(), b.getMaxColumns()).getMergedRanges();
+  merged.forEach(m => m.breakApart());
+
+  let row = 1;
+  BOARD.forEach(h => {
+    b.getRange(row, 1, 1, W).merge().setValue(h.title)
+      .setFontWeight('bold').setFontSize(14).setBackground('#3A2716').setFontColor('#FFD23A').setHorizontalAlignment('center');
+    row++;
+    b.getRange(row, 1, 1, W).setValues([['#'].concat(DAY_LABELS)])
+      .setFontWeight('bold').setBackground('#FCE7BE').setHorizontalAlignment('center');
+    row++;
+    const grid = [];
+    for (let i = 0; i < CAPACITY; i++) {
+      grid.push([i + 1].concat(DATES.map(d => (by[h.id + '-' + d] || [])[i] || '')));
+    }
+    const g = b.getRange(row, 1, CAPACITY, W);
+    g.setValues(grid).setVerticalAlignment('middle').setBorder(true, true, true, true, true, true, '#E3D3B5', SpreadsheetApp.BorderStyle.SOLID);
+    b.getRange(row, 1, CAPACITY, 1).setHorizontalAlignment('center').setFontColor('#7A6650');
+    // צבע: משבצת תפוסה ירוקה, ריקה לבנה
+    const bg = grid.map(r => r.map((v, j) => j === 0 ? '#F7EFE0' : (v ? '#E1F3EA' : '#FFFFFF')));
+    g.setBackgrounds(bg);
+    row += CAPACITY;
+    const totals = ['סה"כ'].concat(DATES.map(d => {
+      const c = (by[h.id + '-' + d] || []).length;
+      return c >= CAPACITY ? 'מלא ' + c + '/' + CAPACITY : c + '/' + CAPACITY;
+    }));
+    const t = b.getRange(row, 1, 1, W);
+    t.setValues([totals]).setFontWeight('bold').setHorizontalAlignment('center').setBackground('#F7EFE0');
+    t.setFontColors([totals.map(v => String(v).indexOf('מלא') === 0 ? '#B4232F' : '#2B1E12')]);
+    row += 2;
+  });
+
+  b.setColumnWidth(1, 44);
+  for (let c = 2; c <= W; c++) b.setColumnWidth(c, 230);
+  b.setFrozenRows(0);
+  b.getRange(row, 1).setValue('מתעדכן אוטומטית מגיליון "הרשמות". עודכן: ' +
+    Utilities.formatDate(new Date(), 'Asia/Jerusalem', 'dd.MM.yyyy HH:mm')).setFontColor('#7A6650').setFontSize(9);
+}
+
+/** כשמשנים משהו בגיליון "הרשמות" (למשל כותבים "בוטל") הלוח מתעדכן */
+function onEdit(e) {
+  try { if (e && e.range.getSheet().getName() === REG_SHEET) buildBoard(); } catch (err) {}
+}
+
+/** תפריט בראש השיטס */
+function onOpen() {
+  SpreadsheetApp.getUi().createMenu('מבצע חנוכה').addItem('רענון לוח השיבוץ', 'buildBoard').addToUi();
 }
