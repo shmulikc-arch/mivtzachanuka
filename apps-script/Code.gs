@@ -101,14 +101,16 @@ function doPost(e) {
     const id = Utilities.getUuid().replace(/-/g, '').slice(0, 6).toUpperCase();
     const hospital = HOSPITALS[shift.split('-')[0]];
     const now = new Date();
-    sheet(REG_SHEET, REG_HEAD).appendRow([now, id, hospital, clean(body.heb_date, 20), clean(body.date, 12), clean(body.time, 20),
+    const regRow = [now, id, hospital, clean(body.heb_date, 20), clean(body.date, 12), clean(body.time, 20),
       father.first, father.last, father.mother, "'" + father.phone, father.city,
-      children.length, children.map(k => k.first).join(', '), 'רשום', shift]);
+      children.length, children.map(k => k.first).join(', '), 'רשום', shift];
+    const reg = sheet(REG_SHEET, REG_HEAD);
+    reg.getRange(reg.getLastRow() + 1, 1, 1, REG_HEAD.length).setValues([regRow]);
     const ks = sheet(KIDS_SHEET, KIDS_HEAD);
-    children.forEach(k => ks.appendRow([id, hospital, clean(body.heb_date, 20), k.first, k.last, k.mother, k.grade, k.branch,
-      father.first + ' ' + father.last, "'" + father.phone, 'רשום']));
-    SpreadsheetApp.flush();
-    try { buildBoard(); } catch (err) {}   // הלוח לא יעצור הרשמה
+    const kidRows = children.map(k => [id, hospital, clean(body.heb_date, 20), k.first, k.last, k.mother, k.grade, k.branch,
+      father.first + ' ' + father.last, "'" + father.phone, 'רשום']);
+    ks.getRange(ks.getLastRow() + 1, 1, kidRows.length, KIDS_HEAD.length).setValues(kidRows);   // כתיבה אחת לכל הילדים
+    try { fillBoard(); } catch (err) {}   // עדכון מהיר של הלוח; לא יעצור הרשמה
     return json({ ok: true, id: id });
   } finally {
     lock.releaseLock();
@@ -124,13 +126,42 @@ function setup() {
 
 /* ============================================================
    לוח שיבוץ: עמודה לכל יום, עד 10 משבצות, לוח לכל בית רפואה
+   layoutBoard: עיצוב מלא (איטי, רץ רק ב־setup / רענון ידני)
+   fillBoard:   רק ערכים וצבעים (מהיר, רץ אחרי כל הרשמה ועריכה)
    ============================================================ */
-function buildBoard() {
+const BLOCK = CAPACITY + 4;   // כותרת, שורת ימים, 10 משבצות, סה"כ, רווח
+const W = DATES.length + 1;
+
+function boardSheet() {
   const ss = SpreadsheetApp.getActive();
   let b = ss.getSheetByName(BOARD_SHEET);
-  if (!b) { b = ss.insertSheet(BOARD_SHEET, 0); b.setRightToLeft(true); }
+  if (!b) { b = ss.insertSheet(BOARD_SHEET, 0); b.setRightToLeft(true); layoutBoard(b); }
+  return b;
+}
 
-  // הרשמות פעילות לפי משמרת, לפי סדר ההרשמה
+function layoutBoard(b) {
+  b = b || boardSheet();
+  b.clear(); b.clearFormats();
+  b.getRange(1, 1, b.getMaxRows(), b.getMaxColumns()).getMergedRanges().forEach(m => m.breakApart());
+  BOARD.forEach((h, k) => {
+    const r = 1 + k * BLOCK;
+    b.getRange(r, 1, 1, W).merge().setValue(h.title)
+      .setFontWeight('bold').setFontSize(14).setBackground('#3A2716').setFontColor('#FFD23A').setHorizontalAlignment('center');
+    b.getRange(r + 1, 1, 1, W).setValues([['#'].concat(DAY_LABELS)])
+      .setFontWeight('bold').setBackground('#FCE7BE').setHorizontalAlignment('center');
+    const g = b.getRange(r + 2, 1, CAPACITY, W);
+    g.setVerticalAlignment('middle').setBorder(true, true, true, true, true, true, '#E3D3B5', SpreadsheetApp.BorderStyle.SOLID);
+    b.getRange(r + 2, 1, CAPACITY, 1).setHorizontalAlignment('center').setFontColor('#7A6650')
+      .setValues(Array.from({ length: CAPACITY }, (_, i) => [i + 1]));
+    b.getRange(r + 2 + CAPACITY, 1, 1, W).setFontWeight('bold').setHorizontalAlignment('center').setBackground('#F7EFE0');
+  });
+  b.setColumnWidth(1, 44);
+  for (let c = 2; c <= W; c++) b.setColumnWidth(c, 230);
+  b.getRange(1 + BOARD.length * BLOCK, 1).setValue('מתעדכן אוטומטית מגיליון "הרשמות".').setFontColor('#7A6650').setFontSize(9);
+}
+
+function fillBoard() {
+  const b = boardSheet();
   const reg = sheet(REG_SHEET, REG_HEAD);
   const n = reg.getLastRow() - 1;
   const rows = n > 0 ? reg.getRange(2, 1, n, REG_HEAD.length).getValues() : [];
@@ -139,56 +170,33 @@ function buildBoard() {
     if (String(r[COL_STATUS - 1]).trim() === 'בוטל') return;
     const id = r[COL_SHIFT - 1]; if (!id) return;
     const kids = r[11];
-    const line = r[6] + ' ' + r[7] + ' · ' + String(r[9]).replace(/^'/, '') + ' · ' + (kids == 1 ? 'ילד אחד' : kids + ' ילדים');
-    (by[id] = by[id] || []).push(line);
+    (by[id] = by[id] || []).push(r[6] + ' ' + r[7] + ' · ' + String(r[9]).replace(/^'/, '') + ' · ' + (kids == 1 ? 'ילד אחד' : kids + ' ילדים'));
   });
-
-  const W = DATES.length + 1;
-  b.clear(); b.clearFormats();
-  const merged = b.getRange(1, 1, b.getMaxRows(), b.getMaxColumns()).getMergedRanges();
-  merged.forEach(m => m.breakApart());
-
-  let row = 1;
-  BOARD.forEach(h => {
-    b.getRange(row, 1, 1, W).merge().setValue(h.title)
-      .setFontWeight('bold').setFontSize(14).setBackground('#3A2716').setFontColor('#FFD23A').setHorizontalAlignment('center');
-    row++;
-    b.getRange(row, 1, 1, W).setValues([['#'].concat(DAY_LABELS)])
-      .setFontWeight('bold').setBackground('#FCE7BE').setHorizontalAlignment('center');
-    row++;
+  BOARD.forEach((h, k) => {
+    const r = 1 + k * BLOCK;
     const grid = [];
-    for (let i = 0; i < CAPACITY; i++) {
-      grid.push([i + 1].concat(DATES.map(d => (by[h.id + '-' + d] || [])[i] || '')));
-    }
-    const g = b.getRange(row, 1, CAPACITY, W);
-    g.setValues(grid).setVerticalAlignment('middle').setBorder(true, true, true, true, true, true, '#E3D3B5', SpreadsheetApp.BorderStyle.SOLID);
-    b.getRange(row, 1, CAPACITY, 1).setHorizontalAlignment('center').setFontColor('#7A6650');
-    // צבע: משבצת תפוסה ירוקה, ריקה לבנה
-    const bg = grid.map(r => r.map((v, j) => j === 0 ? '#F7EFE0' : (v ? '#E1F3EA' : '#FFFFFF')));
-    g.setBackgrounds(bg);
-    row += CAPACITY;
+    for (let i = 0; i < CAPACITY; i++) grid.push(DATES.map(d => (by[h.id + '-' + d] || [])[i] || ''));
+    const g = b.getRange(r + 2, 2, CAPACITY, DATES.length);
+    g.setValues(grid);
+    g.setBackgrounds(grid.map(row => row.map(v => v ? '#E1F3EA' : '#FFFFFF')));
     const totals = ['סה"כ'].concat(DATES.map(d => {
       const c = (by[h.id + '-' + d] || []).length;
       return c >= CAPACITY ? 'מלא ' + c + '/' + CAPACITY : c + '/' + CAPACITY;
     }));
-    const t = b.getRange(row, 1, 1, W);
-    t.setValues([totals]).setFontWeight('bold').setHorizontalAlignment('center').setBackground('#F7EFE0');
+    const t = b.getRange(r + 2 + CAPACITY, 1, 1, W);
+    t.setValues([totals]);
     t.setFontColors([totals.map(v => String(v).indexOf('מלא') === 0 ? '#B4232F' : '#2B1E12')]);
-    row += 2;
   });
-
-  b.setColumnWidth(1, 44);
-  for (let c = 2; c <= W; c++) b.setColumnWidth(c, 230);
-  b.setFrozenRows(0);
-  b.getRange(row, 1).setValue('מתעדכן אוטומטית מגיליון "הרשמות". עודכן: ' +
-    Utilities.formatDate(new Date(), 'Asia/Jerusalem', 'dd.MM.yyyy HH:mm')).setFontColor('#7A6650').setFontSize(9);
 }
+
+/** רענון מלא: עיצוב מחדש + מילוי */
+function buildBoard() { layoutBoard(); fillBoard(); }
 
 /** כשמשנים משהו בגיליון "הרשמות": הסטטוס עובר לילדים, והלוח מתעדכן */
 function onEdit(e) {
   if (!e || e.range.getSheet().getName() !== REG_SHEET) return;
   try { syncKidsStatus(e.range); } catch (err) {}
-  try { buildBoard(); } catch (err) {}
+  try { fillBoard(); } catch (err) {}
 }
 
 /** מעתיק את הסטטוס ("בוטל" / "רשום") מכל הרשמה שנערכה לכל הילדים שלה בגיליון "ילדים" */

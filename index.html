@@ -7,6 +7,10 @@
 <meta property="og:title" content="מבצע חנוכה עם אבא!">
 <meta property="og:description" content="הרשמה למבצעי חנוכה עם אבא בבתי הרפואה – פנסאים ולב חב"ד">
 <meta property="og:image" content="https://shmulikc-arch.github.io/mivtzachanuka/ad.jpg">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
 <meta name="theme-color" content="#3A2716">
 <style>[hidden]{display:none!important}body{margin:0}img{max-width:100%}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}</style>
 </head>
@@ -394,7 +398,17 @@ const Data = (() => {
     if (top < 0 || top > innerHeight * .6) $('#register').scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
   }
 
-  async function refreshAvail() { try { st.avail = await Data.availability(); } catch (e) {} }
+  // טוען תפוסה ברקע, בלי לעכב את המסך. אם המשתמש במסך הימים, מרענן אותו בשקט.
+  let availReq = null;
+  function refreshAvail() {
+    if (availReq) return availReq;
+    availReq = Data.availability().then(a => {
+      const changed = JSON.stringify(a) !== JSON.stringify(st.avail);
+      st.avail = a;
+      if (changed && st.step === 2) renderDays(null, true);
+    }).catch(() => {}).finally(() => { availReq = null; });
+    return availReq;
+  }
 
   /* ---------- שלב 1 ---------- */
   function renderHospitals() {
@@ -420,7 +434,7 @@ const Data = (() => {
   /* ---------- שלב 2 ---------- */
   async function renderDays(msg, quiet) {
     setStep(2);
-    if (!quiet) { scrollToWizard(); await refreshAvail(); }
+    if (quiet) msg = st.lastMsg; else { st.lastMsg = msg; scrollToWizard(); refreshAvail(); }
     const shifts = st.cat.shifts.filter(s => s.hospital_id === st.hospital.id);
     const dates = [...new Set(shifts.map(s => s.date))].sort();
     const dayFull = d => shifts.filter(s => s.date === d).every(s => st.avail[s.id]);
@@ -598,13 +612,11 @@ const Data = (() => {
 
   /* ---------- טעינה ---------- */
   (async () => {
-    try { st.cat = await Data.catalog(); await refreshAvail(); renderHospitals(); }
+    try { st.cat = await Data.catalog(); renderHospitals(); refreshAvail(); }
     catch (e) { pane.innerHTML = '<p class="loading">אין חיבור לשרת כרגע. רעננו את הדף בעוד רגע.</p>'; }
     // רענון תפוסה כל 20 שניות כשמסתכלים על הימים
     setInterval(async () => {
-      if (st.step !== 2) return;
-      const before = JSON.stringify(st.avail); await refreshAvail();
-      if (JSON.stringify(st.avail) !== before) renderDays(null, true);
+      if (st.step === 2) refreshAvail();
     }, 20000);
   })();
 })();
