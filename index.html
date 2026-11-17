@@ -207,7 +207,7 @@ footer{color:var(--muted);font-size:14px;text-align:center;padding-block:32px 40
 .hosp .hrs{margin-top:6px;font-size:14px;font-weight:800;color:var(--flame);direction:ltr;unicode-bidi:isolate}
 </style>
 
-<div class="demo-bar" id="demoBar" hidden>מצב הדגמה: ההרשמות נשמרות רק בדפדפן הזה. יום כ"ח כסלו במאיר מלא לדוגמה.</div>
+<div class="demo-bar" id="demoBar" hidden>מצב הדגמה: ההרשמות עדיין לא נשמרות בגוגל שיטס.</div>
 
 <canvas id="sparkle" aria-hidden="true"></canvas>
 <script>
@@ -280,46 +280,34 @@ footer{color:var(--muted);font-size:14px;text-align:center;padding-block:32px 40
     </div>
   </section>
 
-  <footer style="border-top:1px solid var(--line)">ארגון הפנסאים · לב חב"ד – חסד ומרפא · <a href="admin.html" style="color:inherit">כניסת מנהלים</a></footer>
+  <footer style="border-top:1px solid var(--line)">ארגון הפנסאים · לב חב"ד – חסד ומרפא</footer>
 </div>
 
 <script>
 /* ============================================================
-   שכבת נתונים משותפת לדף ההרשמה ולדשבורד
-   אם SUPABASE_URL ריק → מצב הדגמה (נשמר בדפדפן בלבד)
+   הגדרות המבצע + חיבור לגוגל שיטס (Apps Script)
+   אם SCRIPT_URL ריק → מצב הדגמה (נשמר בדפדפן בלבד)
+   חשוב: רשימת המשמרות כאן חייבת להתאים לרשימה ב־Code.gs
    ============================================================ */
 const CONFIG = {
-  SUPABASE_URL: '',        // https://xxxx.supabase.co
-  SUPABASE_ANON_KEY: '',   // anon public key
+  SCRIPT_URL: '',   // כתובת ה־Web App של Apps Script (מסתיימת ב־/exec)
 };
 
 const Data = (() => {
-  const DEMO = !CONFIG.SUPABASE_URL || !CONFIG.SUPABASE_ANON_KEY;
-  let sb = null;
+  const DEMO = !CONFIG.SCRIPT_URL;
 
-  async function client() {
-    if (sb) return sb;
-    if (!window.supabase) {
-      await new Promise((ok, fail) => {
-        const s = document.createElement('script');
-        s.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js';
-        s.onload = ok; s.onerror = () => fail(new Error('NETWORK'));
-        document.head.appendChild(s);
-      });
-    }
-    sb = window.supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY);
-    return sb;
-  }
-
-  /* ---------------- מצב הדגמה ---------------- */
-  const KEY = 'pansaim_demo_v2';
-  const uid = () => 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
-    const r = Math.random() * 16 | 0; return (c === 'x' ? r : (r & 3 | 8)).toString(16);
-  });
   const DAYS = [
     ['2026-12-06', 'כ"ו כסלו'], ['2026-12-07', 'כ"ז כסלו'], ['2026-12-08', 'כ"ח כסלו'],
     ['2026-12-09', 'כ"ט כסלו'], ['2026-12-10', "ל' כסלו"],
   ];
+  const HOSPITALS = [
+    { id: 'kaplan',  name: 'בית החולים קפלן',   city: 'רחובות', start: '17:00', end: '19:00', capacity: 10 },
+    { id: 'wolfson', name: 'בית החולים וולפסון', city: 'חולון',  start: '16:30', end: '18:30', capacity: 10 },
+  ];
+  const SHIFTS = HOSPITALS.flatMap(h => DAYS.map(([date, heb]) => ({
+    id: `${h.id}-${date}`, hospital_id: h.id, date, heb_date: heb,
+    start_time: h.start, end_time: h.end, capacity: h.capacity, active: true,
+  })));
   const OPTIONS = {
     city: ['בני ברק', 'ירושלים', 'כפר חב"ד', 'פתח תקווה', 'כפר סבא', 'חולון', 'רחובות', 'לוד', 'ראשון לציון', 'בת ים'],
     grade: ['גן', "א'", "ב'", "ג'", "ד'", "ה'", "ו'", "ז'", "ח'"],
@@ -327,159 +315,57 @@ const Data = (() => {
              'סניף חולון', 'סניף רחובות', 'סניף לוד', 'סניף ראשון לציון', 'סניף בת ים'],
   };
 
-  function seed() {
-    const hospitals = [
-      { id: 'h-meir', name: 'בית החולים מאיר', city: 'כפר סבא', sort: 1 },
-      { id: 'h-wolfson', name: 'בית החולים וולפסון', city: 'חולון', sort: 2 },
-      { id: 'h-soroka', name: 'בית החולים סורוקה', city: 'באר שבע', sort: 3 },
-      { id: 'h-kaplan', name: 'בית החולים קפלן', city: 'רחובות', sort: 4 },
-    ];
-    const shifts = [];
-    hospitals.forEach(h => DAYS.forEach(([date, heb], i) => shifts.push({
-      id: `${h.id}-${i}`, hospital_id: h.id, date, heb_date: heb,
-      start_time: '16:30', end_time: '18:30', capacity: 10, active: true,
-    })));
-    // נרשמים לדוגמה: יום אחד מלא כדי לראות "תפוס"
-    const first = ['מנחם', 'יוסף', 'שניאור', 'לוי', 'מענדי', 'שמואל', 'דוד', 'אברהם', 'ישראל', 'חיים', 'זלמן', 'יצחק'];
-    const last = ['כהן', 'לוי', 'גורדון', 'שפירא', 'רבינוביץ', 'פרידמן', 'גולדברג', 'קפלן', 'וולף', 'הלפרין'];
-    const mothers = ['שרה', 'רבקה', 'חיה', 'לאה', 'מושקא', 'חנה', 'דבורה', 'רחל'];
-    const kids = ['מנחם מענדל', 'שניאור זלמן', 'לוי יצחק', 'יוסף יצחק', 'דובער', 'שמואל', 'אליהו', 'משה'];
-    const regs = [], children = [];
-    const fill = { 'h-meir-2': 10, 'h-meir-0': 6, 'h-wolfson-1': 4, 'h-wolfson-3': 9, 'h-meir-4': 2, 'h-soroka-0': 3, 'h-kaplan-1': 10, 'h-kaplan-3': 5 };
-    let n = 0;
-    Object.entries(fill).forEach(([shift_id, count]) => {
-      for (let i = 0; i < count; i++, n++) {
-        const id = uid(), ln = last[n % last.length];
-        regs.push({
-          id, shift_id, father_first: first[n % first.length], father_last: ln,
-          father_mother: mothers[n % mothers.length], phone: '05' + (2 + n % 7) + '-' + String(1000000 + n * 7919).slice(-7),
-          city: OPTIONS.city[n % OPTIONS.city.length], status: 'active',
-          created_at: new Date(Date.now() - (60 - n) * 3600e3).toISOString(), demo: true,
-        });
-        const k = 1 + (n % 3);
-        for (let j = 0; j < k; j++) children.push({
-          id: uid(), registration_id: id, first_name: kids[(n + j) % kids.length], last_name: ln,
-          mother_name: mothers[(n + 1) % mothers.length], grade: OPTIONS.grade[(n + j * 2) % OPTIONS.grade.length],
-          branch: OPTIONS.branch[n % OPTIONS.branch.length], sort: j,
-        });
-      }
-    });
-    return { hospitals, shifts, regs, children };
-  }
+  /* ---------- מצב הדגמה ---------- */
+  const KEY = 'pansaim_demo_v3';
+  const demoLoad = () => { try { return JSON.parse(localStorage.getItem(KEY)) || []; } catch (e) { return []; } };
+  const demoSave = r => { try { localStorage.setItem(KEY, JSON.stringify(r)); } catch (e) {} };
+  const newId = () => Math.random().toString(36).slice(2, 8).toUpperCase();
 
-  function load() {
-    try { const s = JSON.parse(localStorage.getItem(KEY)); if (s && s.hospitals) return s; } catch (e) {}
-    const s = seed(); save(s); return s;
-  }
-  let memory = null;
-  function db() { return memory || (memory = load()); }
-  function save(s) { memory = s; try { localStorage.setItem(KEY, JSON.stringify(s)); } catch (e) {} }
-
-  /* ---------------- API ---------------- */
   async function catalog() {
-    if (DEMO) {
-      const s = db();
-      return { hospitals: s.hospitals, shifts: s.shifts.filter(x => x.active), options: OPTIONS };
-    }
-    const c = await client();
-    const [h, sh, op] = await Promise.all([
-      c.from('hospitals').select('*').eq('active', true).order('sort'),
-      c.from('shifts').select('*').eq('active', true).order('date').order('start_time'),
-      c.from('options').select('*').order('sort'),
-    ]);
-    if (h.error || sh.error || op.error) throw new Error('NETWORK');
-    const options = { city: [], grade: [], branch: [] };
-    op.data.forEach(o => options[o.kind] && options[o.kind].push(o.label));
-    return { hospitals: h.data, shifts: sh.data.map(s => ({ ...s, start_time: s.start_time.slice(0, 5), end_time: s.end_time && s.end_time.slice(0, 5) })), options };
+    return { hospitals: HOSPITALS, shifts: SHIFTS, options: OPTIONS };
   }
 
   async function availability() {
+    const m = {};
     if (DEMO) {
-      const s = db(), m = {};
-      s.shifts.forEach(sh => {
-        m[sh.id] = s.regs.filter(r => r.shift_id === sh.id && r.status === 'active').length >= sh.capacity;
-      });
+      const regs = demoLoad();
+      SHIFTS.forEach(s => m[s.id] = regs.filter(r => r.shift === s.id).length >= s.capacity);
       return m;
     }
-    const c = await client();
-    const { data, error } = await c.rpc('get_availability');
-    if (error) throw new Error('NETWORK');
-    const m = {}; data.forEach(r => m[r.shift_id] = r.is_full); return m;
+    const res = await fetch(CONFIG.SCRIPT_URL + '?action=availability&t=' + Date.now());
+    if (!res.ok) throw new Error('NETWORK');
+    const data = await res.json();
+    const counts = data.counts || {};
+    SHIFTS.forEach(s => m[s.id] = (counts[s.id] || 0) >= s.capacity);
+    return m;
   }
 
   async function register(shiftId, father, kids) {
+    const shift = SHIFTS.find(s => s.id === shiftId);
+    if (!shift) throw new Error('SHIFT_CLOSED');
+    const hosp = HOSPITALS.find(h => h.id === shift.hospital_id);
     if (DEMO) {
-      const s = db(); memory = null; const fresh = db();   // קריאה טרייה, כמו בשרת
-      const sh = fresh.shifts.find(x => x.id === shiftId && x.active);
-      if (!sh) throw new Error('SHIFT_CLOSED');
-      const taken = fresh.regs.filter(r => r.shift_id === shiftId && r.status === 'active').length;
-      if (taken >= sh.capacity) throw new Error('SHIFT_FULL');
-      const id = uid();
-      fresh.regs.push({ id, shift_id: shiftId, father_first: father.first, father_last: father.last,
-        father_mother: father.mother, phone: father.phone, city: father.city, status: 'active',
-        created_at: new Date().toISOString() });
-      kids.forEach((k, i) => fresh.children.push({ id: uid(), registration_id: id, first_name: k.first,
-        last_name: k.last, mother_name: k.mother, grade: k.grade, branch: k.branch, sort: i }));
-      save(fresh); return id;
+      const regs = demoLoad();
+      if (regs.filter(r => r.shift === shiftId).length >= shift.capacity) throw new Error('SHIFT_FULL');
+      const id = newId(); regs.push({ id, shift: shiftId }); demoSave(regs); return id;
     }
-    const c = await client();
-    const { data, error } = await c.rpc('register', { p_shift: shiftId, p_father: father, p_children: kids });
-    if (error) {
-      const m = String(error.message || '');
-      if (m.includes('SHIFT_FULL')) throw new Error('SHIFT_FULL');
-      if (m.includes('SHIFT_CLOSED')) throw new Error('SHIFT_CLOSED');
-      if (m.includes('MISSING_FIELDS') || m.includes('NO_CHILDREN')) throw new Error('MISSING_FIELDS');
-      throw new Error('NETWORK');
-    }
-    return data;
+    let res;
+    try {
+      res = await fetch(CONFIG.SCRIPT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },   // בלי preflight
+        body: JSON.stringify({
+          action: 'register', shift: shiftId, hospital: hosp.name, heb_date: shift.heb_date,
+          date: shift.date, time: shift.start_time + '–' + shift.end_time, father, children: kids,
+        }),
+      });
+    } catch (e) { throw new Error('NETWORK'); }
+    const data = await res.json().catch(() => ({}));
+    if (data.ok) return data.id;
+    throw new Error(data.error || 'NETWORK');
   }
 
-  /* ---------------- ניהול ---------------- */
-  async function signIn(email, password) {
-    if (DEMO) return true;
-    const c = await client();
-    const { error } = await c.auth.signInWithPassword({ email, password });
-    if (error) throw new Error('AUTH');
-    return true;
-  }
-  async function signOut() { if (!DEMO) await (await client()).auth.signOut(); }
-  async function session() {
-    if (DEMO) return { demo: true };
-    const c = await client(); const { data } = await c.auth.getSession(); return data.session;
-  }
-
-  async function adminData() {
-    if (DEMO) {
-      memory = null; const s = db();
-      return { hospitals: s.hospitals, shifts: s.shifts, regs: s.regs, children: s.children };
-    }
-    const c = await client();
-    const [h, sh, r, ch] = await Promise.all([
-      c.from('hospitals').select('*').order('sort'),
-      c.from('shifts').select('*').order('date').order('start_time'),
-      c.from('registrations').select('*').order('created_at', { ascending: false }),
-      c.from('children').select('*').order('sort'),
-    ]);
-    if (r.error) throw new Error(r.error.code === '42501' ? 'NOT_ADMIN' : 'NETWORK');
-    if (h.error || sh.error || ch.error) throw new Error('NETWORK');
-    return { hospitals: h.data, shifts: sh.data.map(s => ({ ...s, start_time: s.start_time.slice(0, 5), end_time: s.end_time && s.end_time.slice(0, 5) })), regs: r.data, children: ch.data };
-  }
-
-  async function setStatus(id, status) {
-    if (DEMO) {
-      memory = null; const s = db(); const r = s.regs.find(x => x.id === id);
-      if (r) { r.status = status; r.cancelled_at = status === 'cancelled' ? new Date().toISOString() : null; }
-      save(s); return;
-    }
-    const c = await client();
-    const { error } = await c.from('registrations')
-      .update({ status, cancelled_at: status === 'cancelled' ? new Date().toISOString() : null }).eq('id', id);
-    if (error) throw new Error('NETWORK');
-  }
-
-  function resetDemo() { if (DEMO) { try { localStorage.removeItem(KEY); } catch (e) {} memory = null; } }
-
-  return { DEMO, catalog, availability, register, signIn, signOut, session, adminData, setStatus, resetDemo };
+  return { DEMO, catalog, availability, register };
 })();
 
 </script>
