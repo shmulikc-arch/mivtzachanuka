@@ -8,7 +8,8 @@
  *    הפעלה בתור: אני | למי יש גישה: כולם (Anyone) → פריסה → לאשר הרשאות.
  * 3. להעתיק את הכתובת שמסתיימת ב־/exec ולשלוח לשמוליק (נכנסת ל־SCRIPT_URL באתר).
  *
- * ביטול הרשמה: לכתוב "בוטל" בעמודת "סטטוס" בגיליון "הרשמות". המקום מתפנה מיד.
+ * ביטול הרשמה: לכתוב "בוטל" בעמודת "סטטוס" בגיליון "הרשמות". המקום מתפנה מיד,
+ * והסטטוס מועתק אוטומטית לכל הילדים של אותה הרשמה בגיליון "ילדים".
  *
  * לוח שיבוץ: גיליון "לוח שיבוץ" מתעדכן לבד אחרי כל הרשמה ואחרי כל שינוי בגיליון "הרשמות".
  * אפשר גם לרענן ידנית מהתפריט "מבצע חנוכה" שבראש השיטס.
@@ -183,12 +184,47 @@ function buildBoard() {
     Utilities.formatDate(new Date(), 'Asia/Jerusalem', 'dd.MM.yyyy HH:mm')).setFontColor('#7A6650').setFontSize(9);
 }
 
-/** כשמשנים משהו בגיליון "הרשמות" (למשל כותבים "בוטל") הלוח מתעדכן */
+/** כשמשנים משהו בגיליון "הרשמות": הסטטוס עובר לילדים, והלוח מתעדכן */
 function onEdit(e) {
-  try { if (e && e.range.getSheet().getName() === REG_SHEET) buildBoard(); } catch (err) {}
+  if (!e || e.range.getSheet().getName() !== REG_SHEET) return;
+  try { syncKidsStatus(e.range); } catch (err) {}
+  try { buildBoard(); } catch (err) {}
+}
+
+/** מעתיק את הסטטוס ("בוטל" / "רשום") מכל הרשמה שנערכה לכל הילדים שלה בגיליון "ילדים" */
+function syncKidsStatus(range) {
+  const first = range.getColumn(), last = first + range.getNumColumns() - 1;
+  if (COL_STATUS < first || COL_STATUS > last) return;           // לא נגעו בעמודת הסטטוס
+  const top = Math.max(2, range.getRow()), bottom = range.getRow() + range.getNumRows() - 1;
+  if (bottom < top) return;
+  const reg = range.getSheet();
+  const vals = reg.getRange(top, 1, bottom - top + 1, REG_HEAD.length).getValues();
+  const status = {};
+  vals.forEach(r => { if (r[1]) status[String(r[1])] = String(r[COL_STATUS - 1]).trim() || 'רשום'; });
+  if (!Object.keys(status).length) return;
+
+  const ks = sheet(KIDS_SHEET, KIDS_HEAD);
+  const n = ks.getLastRow() - 1;
+  if (n < 1) return;
+  const col = KIDS_HEAD.indexOf('סטטוס') + 1;
+  const ids = ks.getRange(2, 1, n, 1).getValues();
+  const cur = ks.getRange(2, col, n, 1).getValues();
+  let changed = false;
+  ids.forEach((r, i) => {
+    const s = status[String(r[0])];
+    if (s !== undefined && cur[i][0] !== s) { cur[i][0] = s; changed = true; }
+  });
+  if (changed) ks.getRange(2, col, n, 1).setValues(cur);
+}
+
+/** להרצה ידנית אם צריך: מסנכרן את כל הסטטוסים מ"הרשמות" ל"ילדים" */
+function syncAllKids() {
+  const reg = sheet(REG_SHEET, REG_HEAD);
+  if (reg.getLastRow() < 2) return;
+  syncKidsStatus(reg.getRange(2, 1, reg.getLastRow() - 1, REG_HEAD.length));
 }
 
 /** תפריט בראש השיטס */
 function onOpen() {
-  SpreadsheetApp.getUi().createMenu('מבצע חנוכה').addItem('רענון לוח השיבוץ', 'buildBoard').addToUi();
+  SpreadsheetApp.getUi().createMenu('מבצע חנוכה').addItem('רענון לוח השיבוץ', 'buildBoard').addItem('סנכרון סטטוס לילדים', 'syncAllKids').addToUi();
 }
