@@ -68,6 +68,12 @@ button{font:inherit;cursor:pointer}
 .ad-bonus strong{font-weight:800}
 .ad .fine{color:var(--muted);font-size:16px;border-block:1px solid var(--line);padding-block:10px}
 .ad .ad-tag{max-width:none}
+.ad-steps{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(4,1fr);gap:12px;width:100%;text-align:center}
+.ad-steps li{background:var(--raise);border:1px solid var(--line);border-radius:16px;padding:16px 12px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.ad-steps h3{font-size:20px;color:var(--coral-a);line-height:1.15}
+.ad-steps p{font-size:15px;line-height:1.45;max-width:none;color:var(--ink)}
+@media (max-width:760px){.ad-steps{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:420px){.ad-steps{grid-template-columns:1fr}}
 .ad-tag{align-self:stretch;margin:8px calc(-1 * clamp(20px,5vw,56px)) 0;background:linear-gradient(90deg,var(--coral-a),var(--coral-b));color:#FFF;font-family:var(--display);font-weight:800;font-size:clamp(22px,4.5vw,32px);padding:16px 12px}
 .ad-tag em{font-style:normal;color:var(--gold-a)}
 
@@ -256,10 +262,15 @@ footer{color:var(--muted);font-size:14px;text-align:center;padding-block:32px 40
 
   <div class="ad rv">
     <p class="ad-kicker">פרויקט מיוחד של הפנסאים ולב חב"ד</p>
-    <h2 class="ad-title"><span>השנה עושים</span><span class="gold" style="display:block;font-size:1em;margin:0">מבצע חנוכה<br>עם אבא!</span></h2>
-    <p class="lead-strong">באחד הערבים בחנוכה, אתם יכולים לצאת ל"מבצעים" יחד עם אבא, ולהביא את האור ואת השמחה גם למאושפזים בבתי הרפואה ולבני משפחותיהם.</p>
-    <div class="ad-bonus"><strong>ויש גם בונוסים!</strong> מי שישתתף ב"מבצע חנוכה" של הפנסאים והאבות יצבור כוכבים למבצע השנתי הגדול וגם ייכנס להגרלות על פרסים שווים.</div>
-    <p class="fine">מספר המקומות מוגבל, אז מהרו להזמין אבא ל"מבצע חנוכה" ביחד ולהירשם באתר המבצע.</p>
+    <h2 class="ad-title"><span class="gold" style="display:block;font-size:1em;margin:0">הפנסאים מאירים:</span><span style="font-size:.8em;margin:4px 0 0">'מבצעים' בסניף שלנו!</span></h2>
+    <p class="lead-strong">בחנוכה הקרוב הפנסאים סניף רחובות יוצאים להאיר בפרויקט מיוחד</p>
+    <p class="fine">איך זה עובד? 4 שלבים בדרך לאור:</p>
+    <ol class="ad-steps">
+      <li><h3>מתחילים בבית</h3><p>מקבלים קופת צדקה אישית, מזכים את כל בני הבית וצוברים בקופת המבצעים שלנו כסף עבור המבצעים.</p></li>
+      <li><h3>קונים יחד</h3><p>בכסף שנאסוף נקנה סופגניות חמות וערכות נרות חנוכה עבור המבצעים בבית הרפואה.</p></li>
+      <li><h3>מתכוננים בסניף</h3><p>כל הנרשמים למיזם נפגשים יחד בסניף להכנה מיוחדת, גיבוש הכנה והדרכה.</p></li>
+      <li><h3>יוצאים לשטח</h3><p>מבקשים מאבא להצטרף אלינו, מקבלים שיבוץ מסודר ויוצאים בקבוצות מדי יום למבצעים, בשיתוף פעולה עם לב חב"ד והשליח המקומי!</p></li>
+    </ol>
     <a class="cta" href="#register">להרשמה</a>
     <p class="ad-tag">אבות ופנסאים <em>יוצאים ומאירים</em></p>
   </div>
