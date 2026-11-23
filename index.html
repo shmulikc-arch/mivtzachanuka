@@ -326,7 +326,7 @@ const Data = (() => {
   const OPTIONS = {
     city: ['בני ברק', 'ירושלים', 'כפר חב"ד', 'פתח תקווה', 'כפר סבא', 'חולון', 'רחובות', 'לוד', 'ראשון לציון', 'בת ים'],
     grade: ['גן', "א'", "ב'", "ג'", "ד'", "ה'", "ו'", "ז'", "ח'"],
-    branch: ['סניף רחובות', 'סניף חולון'],
+    branch: ['רחובות', 'חולון'],
   };
 
   /* ---------- מצב הדגמה ---------- */
@@ -507,7 +507,7 @@ const Data = (() => {
           ${field('f_last', 'שם משפחה', f.last, 'text', 'autocomplete="family-name"')}
           ${field('f_mother', 'שם האם', f.mother)}
           ${field('f_phone', 'טלפון נייד', f.phone, 'tel', 'inputmode="tel" autocomplete="tel" dir="ltr" placeholder="050-0000000"')}
-          ${sel('f_city', 'עיר מגורים', o.city, f.city)}
+          ${field('f_city', 'עיר מגורים', f.city, 'text', 'autocomplete="address-level2"')}
         </div></fieldset>
         <fieldset><legend>הילדים שיוצאים</legend>
           <div id="kids">${st.kids.map((k, i) => `
@@ -556,7 +556,7 @@ const Data = (() => {
     const need = (id, val, what) => { if (!val) bad(id, what); };
     const f = st.father;
     need('f_first', f.first, 'חסר שם פרטי'); need('f_last', f.last, 'חסר שם משפחה');
-    need('f_mother', f.mother, 'חסר שם האם'); need('f_city', f.city, 'בחרו עיר');
+    need('f_mother', f.mother, 'חסר שם האם'); need('f_city', f.city, 'חסרה עיר מגורים');
     const digits = f.phone.replace(/\D/g, '');
     if (!digits) bad('f_phone', 'חסר מספר טלפון');
     else if (!/^05\d{8}$/.test(digits)) bad('f_phone', 'מספר נייד צריך 10 ספרות ולהתחיל ב־05');
