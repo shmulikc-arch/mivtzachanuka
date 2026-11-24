@@ -316,8 +316,8 @@ const Data = (() => {
     ['2026-12-09', 'כ"ט כסלו'], ['2026-12-10', "ל' כסלו"],
   ];
   const HOSPITALS = [
-    { id: 'kaplan',  name: 'בית החולים קפלן',   city: 'רחובות', start: '17:00', end: '19:00', capacity: 10 },
-    { id: 'wolfson', name: 'בית החולים וולפסון', city: 'חולון',  start: '16:30', end: '18:30', capacity: 10 },
+    { id: 'kaplan',  name: 'בית הרפואה קפלן',   city: 'רחובות', start: '17:00', end: '19:00', capacity: 10 },
+    { id: 'wolfson', name: 'בית הרפואה וולפסון', city: 'חולון',  start: '16:30', end: '18:30', capacity: 10 },
   ];
   const SHIFTS = HOSPITALS.flatMap(h => DAYS.map(([date, heb]) => ({
     id: `${h.id}-${date}`, hospital_id: h.id, date, heb_date: heb,
@@ -429,9 +429,9 @@ const Data = (() => {
       <div class="hosp-list">${st.cat.hospitals.map(h => {
         const sh = shiftsOf(h);
         const times = [...new Set(sh.map(s => s.start_time + (s.end_time ? '–' + s.end_time : '')))].join(' / ');
-        const short = h.name.replace(/^בית החולים\s+/, '');
+        const short = h.name.replace(/^בית הרפואה\s+/, '');
         return `<button class="hosp" data-id="${esc(h.id)}" aria-label="${esc(h.name)}, ${esc(h.city || '')}">
-          ${short !== h.name ? '<span class="pre-name">בית החולים</span>' : ''}
+          ${short !== h.name ? '<span class="pre-name">בית הרפואה</span>' : ''}
           <span class="name">${esc(short)}</span>
           <span class="meta">${esc(h.city || '')}</span>
           ${times ? `<span class="hrs">${esc(times)}</span>` : ''}</button>`;
